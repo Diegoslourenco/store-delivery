@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "delivery.jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'delivery.jwt.secret'"
+  },
+  {
+    "name": "delivery.jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'delivery.jwt.expiration'"
+  }
+]}
