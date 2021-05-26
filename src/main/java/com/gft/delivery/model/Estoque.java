@@ -2,44 +2,42 @@ package com.gft.delivery.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.validation.constraints.NotNull;
 
 /**
- * Produto --- represents a Produto in the Estoque.
+ * Estoque --- represents the stock of a specific product in the store.
  * @author    Diego da Silva Lourenco
  */
 
 @Entity
-@Table(name = "produtos")
-@JsonIgnoreProperties("estoque")
-public class Produto implements Serializable {
+@Table(name = "estoques")
+public class Estoque implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
-	private String name;
+	@NotNull
+	@OneToOne
+	@JoinColumn(name = "produto_id")
+	private Produto produto;
 	
-	@NotBlank
-	private String description;
+	@NotNull
+	private int quantity;
 	
-	@NotBlank
-	private String unit;
-	
-	@OneToOne(mappedBy = "produto", cascade = CascadeType.REMOVE)
-	private Estoque estoque;
+	@NotNull
+	@Column(name = "selling_price")
+	private Double sellingPrice;
 
 	public Long getId() {
 		return id;
@@ -49,36 +47,28 @@ public class Produto implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
-	public String getDescription() {
-		return description;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
-	public String getUnit() {
-		return unit;
+	public double getSellingPrice() {
+		return sellingPrice;
 	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public Estoque getEstoque() {
-		return estoque;
-	}
-
-	public void setEstoque(Estoque estoque) {
-		this.estoque = estoque;
+	public void setSellingPrice(double sellingPrice) {
+		this.sellingPrice = sellingPrice;
 	}
 
 	@Override
@@ -97,7 +87,7 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Estoque other = (Estoque) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
