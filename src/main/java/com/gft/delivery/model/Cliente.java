@@ -1,6 +1,7 @@
 package com.gft.delivery.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,16 +12,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import org.hibernate.validator.constraints.br.CNPJ;
-
-/**
- * Fornecedor --- represents a supplier company for the store.
- * @author    Diego da Silva Lourenco
- */
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
-@Table(name = "fornecedores")
-public class Fornecedor implements Serializable {
+@Table(name = "clientes")
+public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,8 +25,8 @@ public class Fornecedor implements Serializable {
 	private Long id;
 	
 	@NotBlank
-	@CNPJ
-	private String cnpj;
+	@CPF
+	private String cpf;
 	
 	@NotBlank
 	private String name;
@@ -53,12 +49,12 @@ public class Fornecedor implements Serializable {
 		this.id = id;
 	}
 
-	public String getCnpj() {
-		return cnpj;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getName() {
@@ -95,10 +91,7 @@ public class Fornecedor implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -109,13 +102,8 @@ public class Fornecedor implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Fornecedor other = (Fornecedor) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		Cliente other = (Cliente) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }
