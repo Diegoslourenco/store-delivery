@@ -68,6 +68,10 @@ public class ProdutoService {
 	public void delete(Long id) {
 		produtos.deleteById(id);
 	}
+	
+	public boolean produtoExists(Long id) {
+		return produtos.existsById(id);	
+	}
 
 	private Produto getById(Long id) {
 		Optional<Produto> starterSaved = produtos.findById(id);

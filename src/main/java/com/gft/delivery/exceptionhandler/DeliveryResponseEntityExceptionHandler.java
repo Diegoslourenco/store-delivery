@@ -156,7 +156,27 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
-
+	@ExceptionHandler({ FornecedorNotFoundException.class })
+	public ResponseEntity<Object> handleFornecedorNotFoundException(FornecedorNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ProdutoNotFoundException.class })
+	public ResponseEntity<Object> handleProdutoNotFoundException(ProdutoNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("produto.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
 	
 	private List<Error> createErrorsList(BindingResult bindingResult) {
 		List<Error> errors = new ArrayList<>();
