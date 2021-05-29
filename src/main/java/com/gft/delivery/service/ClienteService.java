@@ -67,13 +67,13 @@ public class ClienteService {
 	}
 
 	private Cliente getById(Long id) {
-		Optional<Cliente> starterSaved = clientes.findById(id);
+		Optional<Cliente> clienteSaved = clientes.findById(id);
 		
-		if (starterSaved.isEmpty()) {
+		if (clienteSaved.isEmpty()) {
 			throw new EmptyResultDataAccessException(1);
 		}
 		
-		return starterSaved.get();
+		return clienteSaved.get();
 	}
 	
 	private void checkUniqueCliente(Cliente novoCliente) {

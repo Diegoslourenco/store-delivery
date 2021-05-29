@@ -6,38 +6,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gft.delivery.model.Compra;
-import com.gft.delivery.model.Item;
-import com.gft.delivery.model.TypeTransaction;
-import com.gft.delivery.repository.ItemRepository;
+import com.gft.delivery.model.ItemCompra;
+import com.gft.delivery.model.ItemVenda;
+import com.gft.delivery.model.Venda;
+import com.gft.delivery.repository.ItemCompraRepository;
+import com.gft.delivery.repository.ItemVendaRepository;
 
 @Service
 public class ItemService {
 	
 	@Autowired
-	ItemRepository itens;
+	ItemCompraRepository itensCompra;
+	
+	@Autowired
+	ItemVendaRepository itensVenda;
 	
 	@Autowired
 	EstoqueService estoqueService;
 	
-	public void save(Item item) {	
-		itens.save(item);	
+	public void saveCompra(ItemCompra itemCompra) {	
+		itensCompra.save(itemCompra);	
 	}
 	
-	public void saveList(List<Item> itens, Compra compra) {
+	public void saveVenda(ItemVenda itemVenda) {	
+		itensVenda.save(itemVenda);	
+	}
+	
+	public void saveItemCompraList(List<ItemCompra> itens, Compra compra) {
 		
-		for (Item item : itens) {
+		for (ItemCompra itemCompra : itens) {
 			
-			item.setCompra(compra);
-			item.setTransaction(TypeTransaction.COMPRA);
-			this.save(item);
+			itemCompra.setCompra(compra);
+			this.saveCompra(itemCompra);
 			
-			if (estoqueService.estoqueExists(item.getProduto().getId())) {
+			if (estoqueService.estoqueExists(itemCompra.getProduto().getId())) {
 				
-				estoqueService.updateQuantity(item.getProduto().getId(), item.getQuantity());
+				estoqueService.updateQuantity(itemCompra.getProduto().getId(), itemCompra.getQuantity());
 			}
 			else {			
-				estoqueService.save(item);
+				estoqueService.save(itemCompra);
 			}	
+		}	
+	}
+	
+	public void saveItemVendaList(List<ItemVenda> itens, Venda venda) {
+		
+		for (ItemVenda itemVenda : itens) {
+			
+			int price = estoqueService.getByProdutoId(itemVenda.getProduto().getId()).get().getQuantity();
+			
+			itemVenda.setVenda(venda);
+			itemVenda.setPrice(price);
+			this.saveVenda(itemVenda);
+			
+			estoqueService.updateQuantity(itemVenda.getProduto().getId(), -itemVenda.getQuantity());
 		}	
 	}
 

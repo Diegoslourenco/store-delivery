@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.gft.delivery.model.Fornecedor;
-import com.gft.delivery.model.Item;
+import com.gft.delivery.model.ItemCompra;
 
 public class CompraRequestDto {
 	
@@ -13,7 +13,7 @@ public class CompraRequestDto {
 	private Fornecedor fornecedor;
 	
 	@NotNull
-	private List<Item> itens;
+	private List<ItemCompra> itens;
 
 	public Fornecedor getFornecedor() {
 		return fornecedor;
@@ -23,11 +23,11 @@ public class CompraRequestDto {
 		this.fornecedor = fornecedor;
 	}
 
-	public List<Item> getItens() {
+	public List<ItemCompra> getItens() {
 		return itens;
 	}
 
-	public void setItens(List<Item> itens) {
+	public void setItens(List<ItemCompra> itens) {
 		this.itens = itens;
 	}
 

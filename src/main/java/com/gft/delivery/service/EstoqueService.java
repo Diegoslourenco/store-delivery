@@ -11,7 +11,7 @@ import com.gft.delivery.assembler.EstoqueAssembler;
 import com.gft.delivery.dto.EstoqueDto;
 import com.gft.delivery.dto.ProdutoPriceDto;
 import com.gft.delivery.model.Estoque;
-import com.gft.delivery.model.Item;
+import com.gft.delivery.model.ItemCompra;
 import com.gft.delivery.repository.EstoqueRepository;
 
 @Service
@@ -31,13 +31,12 @@ public class EstoqueService {
 		return estoqueAssembler.toModel(getById(id));
 	}
 	
-	public void save(Item item) {
+	public void save(ItemCompra itemCompra) {
 		
 		Estoque estoque = new Estoque();
 		
-		estoque.setProduto(item.getProduto());
-		estoque.setQuantity(item.getQuantity());
-		estoque.setSellingPrice(item.getPrice());
+		estoque.setProduto(itemCompra.getProduto());
+		estoque.setQuantity(itemCompra.getQuantity());
 			
 		estoques.save(estoque);
 	}
@@ -61,21 +60,25 @@ public class EstoqueService {
 	
 	public boolean estoqueExists(Long produtoId) {
 		
-		if (estoques.findByProdutoId(produtoId).isEmpty()) {
+		if (this.getByProdutoId(produtoId).isEmpty()) {
 			return false;
 		}
 		
 		return true;	
 	}
 
-	private Estoque getById(Long id) {
-		Optional<Estoque> starterSaved = estoques.findById(id);
+	public Estoque getById(Long id) {
+		Optional<Estoque> estoqueSaved = estoques.findById(id);
 		
-		if (starterSaved.isEmpty()) {
+		if (estoqueSaved.isEmpty()) {
 			throw new EmptyResultDataAccessException(1);
 		}
 		
-		return starterSaved.get();
+		return estoqueSaved.get();
+	}
+	
+	public Optional<Estoque> getByProdutoId(Long produtoId) {
+		return estoques.findByProdutoId(produtoId);
 	}
 
 }

@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,14 +15,14 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Item --- represents an item in a buy or sale list.
+ * ItemCompra --- represents an item in a buy or sale list.
  * @author    Diego da Silva Lourenco
  */
 
 @Entity
-@Table(name = "itens")
+@Table(name = "itens_compra")
 @JsonIgnoreProperties({"compra"})
-public class Item implements Serializable {
+public class ItemCompra implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -42,10 +40,6 @@ public class Item implements Serializable {
 	
 	@NotNull
 	private double price;
-	
-	@JsonIgnoreProperties
-	@Enumerated(EnumType.STRING)
-	private TypeTransaction transaction;
 	
 	@ManyToOne
 	@JoinColumn(name = "compra_id")
@@ -83,14 +77,6 @@ public class Item implements Serializable {
 		this.price = price;
 	}
 
-	public TypeTransaction getTransaction() {
-		return transaction;
-	}
-
-	public void setTransaction(TypeTransaction transaction) {
-		this.transaction = transaction;
-	}
-
 	public Compra getCompra() {
 		return compra;
 	}
@@ -112,7 +98,7 @@ public class Item implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Item other = (Item) obj;
+		ItemCompra other = (ItemCompra) obj;
 		return Objects.equals(id, other.id);
 	}	
 
