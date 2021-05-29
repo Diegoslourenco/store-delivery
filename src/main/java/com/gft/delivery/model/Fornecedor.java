@@ -2,44 +2,50 @@ package com.gft.delivery.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.validator.constraints.br.CNPJ;
+
+
 
 /**
- * Produto --- represents a product in the stock.
+ * Fornecedor --- represents a supplier company for the store.
  * @author    Diego da Silva Lourenco
  */
 
 @Entity
-@Table(name = "produtos")
-@JsonIgnoreProperties("estoque")
-public class Produto implements Serializable {
+@Table(name = "fornecedores")
+public class Fornecedor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotBlank
+	@CNPJ
+	private String cnpj;
+	
+	@NotBlank
 	private String name;
 	
 	@NotBlank
-	private String description;
+	private String phone;
 	
 	@NotBlank
-	private String unit;
+	@Email
+	private String email;
 	
-	@OneToOne(mappedBy = "produto", cascade = CascadeType.REMOVE)
-	private Estoque estoque;
+	@Embedded
+	private Address address;
 
 	public Long getId() {
 		return id;
@@ -47,6 +53,14 @@ public class Produto implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getCnpj() {
+		return cnpj;
+	}
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 
 	public String getName() {
@@ -57,28 +71,28 @@ public class Produto implements Serializable {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public String getUnit() {
-		return unit;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public Estoque getEstoque() {
-		return estoque;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setEstoque(Estoque estoque) {
-		this.estoque = estoque;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	@Override
@@ -97,7 +111,7 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		Fornecedor other = (Fornecedor) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -90,6 +90,50 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ FornecedorCnpjNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorCnpjNotUniqueException(FornecedorCnpjNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.cnpj-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ FornecedorNameNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorNameNotUniqueException(FornecedorNameNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.name-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ FornecedorPhoneNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorPhoneNotUniqueException(FornecedorPhoneNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.phone-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ FornecedorEmailNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorEmailNotUniqueException(FornecedorEmailNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.email-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	private List<Error> createErrorsList(BindingResult bindingResult) {
 		List<Error> errors = new ArrayList<>();
 		
