@@ -2,16 +2,12 @@ package com.gft.delivery.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Produto --- represents a product in the stock.
@@ -20,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "produtos")
-@JsonIgnoreProperties("estoque")
 public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,9 +32,6 @@ public class Produto implements Serializable {
 	
 	@NotBlank
 	private String unit;
-	
-	@OneToOne(mappedBy = "produto", cascade = CascadeType.REMOVE)
-	private Estoque estoque;
 
 	public Long getId() {
 		return id;
@@ -71,14 +63,6 @@ public class Produto implements Serializable {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
-	}
-
-	public Estoque getEstoque() {
-		return estoque;
-	}
-
-	public void setEstoque(Estoque estoque) {
-		this.estoque = estoque;
 	}
 
 	@Override

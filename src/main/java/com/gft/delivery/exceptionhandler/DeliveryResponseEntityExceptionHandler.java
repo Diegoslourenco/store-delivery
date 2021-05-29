@@ -123,6 +123,28 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ ClienteEmailNotUniqueException.class })
+	public ResponseEntity<Object> handleClienteEmailNotUniqueException(ClienteEmailNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("cliente.email-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ClienteCpfNotUniqueException.class })
+	public ResponseEntity<Object> handleClienteCpfNotUniqueException(ClienteCpfNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("cliente.cpf-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({ FornecedorEmailNotUniqueException.class })
 	public ResponseEntity<Object> handleFornecedorEmailNotUniqueException(FornecedorEmailNotUniqueException ex, WebRequest request) {
 		
@@ -133,6 +155,8 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
+	
+
 	
 	private List<Error> createErrorsList(BindingResult bindingResult) {
 		List<Error> errors = new ArrayList<>();
