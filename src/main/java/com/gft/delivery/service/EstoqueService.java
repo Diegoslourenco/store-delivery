@@ -2,10 +2,7 @@ package com.gft.delivery.service;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
@@ -13,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.gft.delivery.assembler.EstoqueAssembler;
 import com.gft.delivery.dto.EstoqueDto;
 import com.gft.delivery.dto.ProdutoPriceDto;
-import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.model.Estoque;
+import com.gft.delivery.model.Item;
 import com.gft.delivery.repository.EstoqueRepository;
 
 @Service
@@ -26,9 +23,6 @@ public class EstoqueService {
 	@Autowired
 	private EstoqueRepository estoques;
 	
-	@Autowired
-	private ApplicationEventPublisher publisher;
-	
 	public CollectionModel<EstoqueDto> search() {
 		return estoqueAssembler.toCollectionModel(estoques.findAll());
 	}
@@ -37,17 +31,18 @@ public class EstoqueService {
 		return estoqueAssembler.toModel(getById(id));
 	}
 	
-	// TODO it
-	public EstoqueDto save(Estoque estoque, HttpServletResponse response) {	
+	public void save(Item item) {
+		
+		Estoque estoque = new Estoque();
+		
+		estoque.setProduto(item.getProduto());
+		estoque.setQuantity(item.getQuantity());
+		estoque.setSellingPrice(item.getPrice());
 			
-		Estoque estoqueSaved = estoques.save(estoque);
-		
-		publisher.publishEvent(new ResourceCreatedEvent(this, response, estoqueSaved.getId()));
-		
-		return estoqueAssembler.toModel(estoqueSaved);
+		estoques.save(estoque);
 	}
 	
-	public EstoqueDto update(Long id, ProdutoPriceDto price) {
+	public EstoqueDto updatePrice(Long id, ProdutoPriceDto price) {
 		
 		Estoque estoqueSaved = getById(id);	
 		estoqueSaved.setSellingPrice(price.getPrice());
@@ -55,9 +50,22 @@ public class EstoqueService {
 		return estoqueAssembler.toModel(estoques.save(estoqueSaved));
 	}
 	
-	// TODO
-	public void delete(Long id) {
-		estoques.deleteById(id);
+	public void updateQuantity(Long produtoId, int quantity) {
+		
+		Estoque estoqueSaved = estoques.findByProdutoId(produtoId).get();
+		
+		estoqueSaved.setQuantity(estoqueSaved.getQuantity() + quantity);
+		
+		estoques.save(estoqueSaved);
+	}
+	
+	public boolean estoqueExists(Long produtoId) {
+		
+		if (estoques.findByProdutoId(produtoId).isEmpty()) {
+			return false;
+		}
+		
+		return true;	
 	}
 
 	private Estoque getById(Long id) {

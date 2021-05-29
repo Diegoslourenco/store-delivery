@@ -35,8 +35,8 @@ public class EstoqueController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<EstoqueDto> update(@PathVariable Long id, @Valid @RequestBody ProdutoPriceDto price) {	
-		return new ResponseEntity<EstoqueDto>(estoqueService.update(id, price), HttpStatus.OK);
+	public ResponseEntity<EstoqueDto> updatePrice(@PathVariable Long id, @Valid @RequestBody ProdutoPriceDto price) {	
+		return new ResponseEntity<EstoqueDto>(estoqueService.updatePrice(id, price), HttpStatus.OK);
 	}
 	
 }

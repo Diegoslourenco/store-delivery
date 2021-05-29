@@ -67,6 +67,10 @@ public class FornecedorService {
 	public void delete(Long id) {
 		fornecedores.deleteById(id);
 	}
+	
+	public boolean fornecedorExists(Long id) {
+		return fornecedores.existsById(id);	
+	}
 
 	private Fornecedor getById(Long id) {
 		Optional<Fornecedor> starterSaved = fornecedores.findById(id);
@@ -93,7 +97,7 @@ public class FornecedorService {
 		
 		for (Fornecedor fornecedor : allFornecedors) {
 			
-			if ((novoFornecedor.getId() != null) && (!fornecedor.getId().equals(id))) {
+			if ((!fornecedor.getId().equals(id))) {
 				checkFieldsFornecedor(fornecedor, novoFornecedor);
 			}	
 		}

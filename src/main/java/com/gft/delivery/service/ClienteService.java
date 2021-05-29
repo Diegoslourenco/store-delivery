@@ -91,7 +91,7 @@ public class ClienteService {
 		
 		for (Cliente cliente : allClientes) {
 			
-			if ((novoCliente.getId() != null) && (!cliente.getId().equals(id))) {
+			if (!cliente.getId().equals(id)) {
 				checkFieldsCliente(cliente, novoCliente);
 			}	
 		}
