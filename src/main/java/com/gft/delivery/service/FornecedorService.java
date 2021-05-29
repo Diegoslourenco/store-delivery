@@ -73,13 +73,13 @@ public class FornecedorService {
 	}
 
 	private Fornecedor getById(Long id) {
-		Optional<Fornecedor> starterSaved = fornecedores.findById(id);
+		Optional<Fornecedor> fornecedorSaved = fornecedores.findById(id);
 		
-		if (starterSaved.isEmpty()) {
+		if (fornecedorSaved.isEmpty()) {
 			throw new EmptyResultDataAccessException(1);
 		}
 		
-		return starterSaved.get();
+		return fornecedorSaved.get();
 	}
 	
 	private void checkUniqueFornecedor(Fornecedor novoFornecedor) {

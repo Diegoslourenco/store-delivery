@@ -1,12 +1,17 @@
 package com.gft.delivery.dto;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
  * ProdutoDto --- represents the DTO for the resource Produto.
  * @author    Diego da Silva Lourenco
  */
 
+@JsonRootName(value = "produto")
+@Relation(collectionRelation = "produtos")
 public class ProdutoDto extends RepresentationModel<ProdutoDto> {
 	
 	private Long id;	

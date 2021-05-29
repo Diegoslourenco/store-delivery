@@ -1,7 +1,9 @@
 package com.gft.delivery.dto;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gft.delivery.model.Produto;
 
 /**
@@ -9,6 +11,8 @@ import com.gft.delivery.model.Produto;
  * @author    Diego da Silva Lourenco
  */
 
+@JsonRootName(value = "estoque")
+@Relation(collectionRelation = "estoques")
 public class EstoqueDto extends RepresentationModel<EstoqueDto> {
 	
 	private Long id;

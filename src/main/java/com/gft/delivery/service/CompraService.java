@@ -17,14 +17,14 @@ import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.FornecedorNotFoundException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.model.Compra;
-import com.gft.delivery.model.Item;
+import com.gft.delivery.model.ItemCompra;
 import com.gft.delivery.repository.CompraRepository;
 
 @Service
 public class CompraService {
 	
 	@Autowired
-	CompraAssembler compraAssembler;
+	private CompraAssembler compraAssembler;
 	
 	@Autowired
 	private CompraRepository compras;
@@ -55,8 +55,8 @@ public class CompraService {
 			throw new FornecedorNotFoundException();	
 		}
 		
-		for (Item item : compraRequest.getItens()) {			
-			if (!produtoService.produtoExists(item.getProduto().getId())) {
+		for (ItemCompra itemCompra : compraRequest.getItens()) {			
+			if (!produtoService.produtoExists(itemCompra.getProduto().getId())) {
 				throw new ProdutoNotFoundException();			
 			}
 		}
@@ -66,8 +66,8 @@ public class CompraService {
 	
 		Compra compraSaved = compras.save(compra);
 				
-		// Updating quantity and saving Item list
-		itemService.saveList(compraRequest.getItens(), compraSaved);
+		// Updating quantity and saving ItemCompra list
+		itemService.saveItemCompraList(compraRequest.getItens(), compraSaved);
 		
 		publisher.publishEvent(new ResourceCreatedEvent(this, response, compraSaved.getId()));
 		
@@ -75,13 +75,13 @@ public class CompraService {
 	}
 
 	private Compra getById(Long id) {
-		Optional<Compra> starterSaved = compras.findById(id);
+		Optional<Compra> compraSaved = compras.findById(id);
 		
-		if (starterSaved.isEmpty()) {
+		if (compraSaved.isEmpty()) {
 			throw new EmptyResultDataAccessException(1);
 		}
 		
-		return starterSaved.get();
+		return compraSaved.get();
 	}
 
 }

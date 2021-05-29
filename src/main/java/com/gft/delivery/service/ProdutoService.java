@@ -74,13 +74,13 @@ public class ProdutoService {
 	}
 
 	private Produto getById(Long id) {
-		Optional<Produto> starterSaved = produtos.findById(id);
+		Optional<Produto> produtoSaved = produtos.findById(id);
 		
-		if (starterSaved.isEmpty()) {
+		if (produtoSaved.isEmpty()) {
 			throw new EmptyResultDataAccessException(1);
 		}
 		
-		return starterSaved.get();
+		return produtoSaved.get();
 	}
 	
 	private boolean checkUniqueName(Produto novoProduto) {

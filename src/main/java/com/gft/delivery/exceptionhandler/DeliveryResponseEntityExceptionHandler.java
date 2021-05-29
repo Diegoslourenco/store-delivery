@@ -178,6 +178,28 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ EstoqueNotFoundException.class })
+	public ResponseEntity<Object> handleEstoqueNotFoundException(EstoqueNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("estoque.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ EstoqueNotEnoughException.class })
+	public ResponseEntity<Object> handleEstoqueNotEnoughException(EstoqueNotEnoughException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("estoque.not-enough", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	private List<Error> createErrorsList(BindingResult bindingResult) {
 		List<Error> errors = new ArrayList<>();
 		

@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,14 +19,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * Compra --- represents a buy from a supplier company.
+ * Venda --- represents a sell to a client.
  * @author    Diego da Silva Lourenco
  */
 
 @Entity
-@Table(name = "compras")
-public class Compra implements Serializable {
-
+@Table(name = "vendas")
+public class Venda implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -32,11 +35,15 @@ public class Compra implements Serializable {
 	
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "fornecedor_id")
-	private Fornecedor fornecedor;
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
 	
-	@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
-	private List<ItemCompra> itens;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private VendaStatus status;
+	
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+	private List<ItemVenda> itens;
 
 	public Long getId() {
 		return id;
@@ -46,19 +53,27 @@ public class Compra implements Serializable {
 		this.id = id;
 	}
 
-	public Fornecedor getFornecedor() {
-		return fornecedor;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setFornecedor(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public List<ItemCompra> getItens() {
+	public VendaStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(VendaStatus status) {
+		this.status = status;
+	}
+
+	public List<ItemVenda> getItens() {
 		return itens;
 	}
 
-	public void setItens(List<ItemCompra> itens) {
+	public void setItens(List<ItemVenda> itens) {
 		this.itens = itens;
 	}
 
@@ -75,7 +90,7 @@ public class Compra implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Compra other = (Compra) obj;
+		Venda other = (Venda) obj;
 		return Objects.equals(id, other.id);
 	}
 
