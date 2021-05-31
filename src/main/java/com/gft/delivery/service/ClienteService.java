@@ -10,13 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.gft.delivery.assembler.ClienteAssembler;
 import com.gft.delivery.dto.ClienteDto;
+import com.gft.delivery.dto.ClienteRequestDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.ClienteCpfNotUniqueException;
 import com.gft.delivery.exceptionhandler.ClienteEmailNotUniqueException;
+import com.gft.delivery.exceptionhandler.ClienteNotSameException;
 import com.gft.delivery.model.Cliente;
 import com.gft.delivery.repository.ClienteRepository;
 
@@ -24,10 +28,13 @@ import com.gft.delivery.repository.ClienteRepository;
 public class ClienteService {
 	
 	@Autowired
-	ClienteAssembler clienteAssembler;
+	private ClienteAssembler clienteAssembler;
 	
 	@Autowired
 	private ClienteRepository clientes;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@Autowired
 	private ApplicationEventPublisher publisher;
@@ -40,11 +47,16 @@ public class ClienteService {
 		return clienteAssembler.toModel(getById(id));
 	}
 	
-	public ClienteDto save(Cliente cliente, HttpServletResponse response) {
+	public ClienteDto save(ClienteRequestDto clienteRequestDto, HttpServletResponse response) {
 		
-		checkUniqueCliente(cliente);
+		Cliente novoCliente = new Cliente(clienteRequestDto.getCpf(), clienteRequestDto.getName(), clienteRequestDto.getPhone(),
+										clienteRequestDto.getEmail(), clienteRequestDto.getAddress());;
+		
+		checkUniqueCliente(novoCliente);
 			
-		Cliente clienteSaved = clientes.save(cliente);
+		Cliente clienteSaved = clientes.save(novoCliente);
+		
+		usuarioService.save(novoCliente, clienteRequestDto.getPassword());
 		
 		publisher.publishEvent(new ResourceCreatedEvent(this, response, clienteSaved.getId()));
 		
@@ -53,9 +65,16 @@ public class ClienteService {
 
 	public ClienteDto update(Long id, Cliente cliente) {
 		
-		checkUniqueCliente(id, cliente);
-
 		Cliente clienteSaved = getById(id);
+		
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String userEmail = user.getUsername();
+		
+		if (!clienteSaved.getEmail().equals(userEmail)) {
+			throw new ClienteNotSameException();
+		}
+		
+		checkUniqueCliente(id, cliente);
 		
 		BeanUtils.copyProperties(cliente, clienteSaved, "id");
 		

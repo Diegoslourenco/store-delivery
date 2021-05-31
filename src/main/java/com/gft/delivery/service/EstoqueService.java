@@ -1,5 +1,6 @@
 package com.gft.delivery.service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class EstoqueService {
 		
 		estoque.setProduto(itemCompra.getProduto());
 		estoque.setQuantity(itemCompra.getQuantity());
+		estoque.setSellingPrice(new BigDecimal(0.00));
 			
 		estoques.save(estoque);
 	}

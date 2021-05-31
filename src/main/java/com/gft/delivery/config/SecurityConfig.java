@@ -5,76 +5,62 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.gft.delivery.security.AuthEntryPointJwt;
+import com.gft.delivery.security.AuthTokenFilter;
+import com.gft.delivery.service.AuthenticationService;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	/*
+	
 	@Autowired
-	private AutenticationService autenticationService;
+	private AuthenticationService authenticationService;
 	
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 	 
 	@Override
 	protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-		builder.userDetailsService(autenticationService).passwordEncoder(new BCryptPasswordEncoder());
+		builder.userDetailsService(authenticationService).passwordEncoder(new BCryptPasswordEncoder());
 	}
-	*/
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-			//.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-			//.and()
-		
+			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
-			.antMatchers("/produtos/**",
-						 "/estoques/**",
-						 "/fornecedores/**",
-						 "/clientes/**",
-						 "/compras/**",
-						 "/vendas/**").permitAll()
-			.anyRequest().authenticated();
-			//.and()
-			//.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);	
+			.antMatchers(HttpMethod.POST, "/clientes").permitAll()
+			.anyRequest().authenticated()
+			.and()
+			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);	
 	}
-	
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-        	.antMatchers("/**.html",
-        				 "/v2/api-docs",
-        				 "/webjars/**",
-        				 "/configuration/**","/swagger-resources/**");
-    }
 	
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    /*
+    
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
-    }
-    */
-    /*
+    } 
+    
     @Bean
     @Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
     	return super.authenticationManagerBean();
     }
-	*/
+     
 }
 

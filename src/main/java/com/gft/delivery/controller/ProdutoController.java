@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,21 +33,25 @@ public class ProdutoController {
 		return new ResponseEntity<CollectionModel<ProdutoDto>>(produtoService.search(), HttpStatus.OK);	
 	}
 	
+	@PreAuthorize("hasRole('LOJA')")
 	@GetMapping("/{id}")
 	public ResponseEntity<ProdutoDto> getOne(@PathVariable Long id) {
 		return new ResponseEntity<ProdutoDto>(produtoService.getOne(id), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('LOJA')")
 	@PostMapping
 	public ResponseEntity<ProdutoDto> create(@Valid @RequestBody Produto produto, HttpServletResponse response) {
 		return new ResponseEntity<ProdutoDto>(produtoService.save(produto, response), HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasRole('LOJA')")
 	@PutMapping("/{id}")
 	public ResponseEntity<ProdutoDto> update(@PathVariable Long id, @Valid @RequestBody Produto produto) {			
 		return new ResponseEntity<ProdutoDto>(produtoService.update(id, produto), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasRole('LOJA')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		produtoService.delete(id);
