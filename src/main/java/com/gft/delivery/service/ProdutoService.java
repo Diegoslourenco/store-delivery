@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.gft.delivery.assembler.ProdutoAssembler;
@@ -31,8 +34,22 @@ public class ProdutoService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
+	private final String CLIENTE = "CLIENTE";
+	
 	public CollectionModel<ProdutoDto> search() {
-		return produtoAssembler.toCollectionModel(produtos.findAll());
+		
+		List<Produto> allProdutos = produtos.findAll();
+		
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (StringUtils.contains(user.getAuthorities().toString(), CLIENTE)) {
+					
+			allProdutos.removeIf(produto -> 
+								produto.getEstoque().getQuantity() == 0 ||
+								produto.getEstoque().getSellingPrice().doubleValue() == 0);
+		}
+		
+		return produtoAssembler.toCollectionModel(allProdutos);
 	}
 
 	public ProdutoDto getOne(Long id) {

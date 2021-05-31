@@ -1,5 +1,6 @@
 package com.gft.delivery.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class ItemService {
 		
 		for (ItemVenda itemVenda : itens) {
 			
-			int price = estoqueService.getByProdutoId(itemVenda.getProduto().getId()).get().getQuantity();
+			BigDecimal price = estoqueService.getByProdutoId(itemVenda.getProduto().getId()).get().getSellingPrice();
 			
 			itemVenda.setVenda(venda);
 			itemVenda.setPrice(price);

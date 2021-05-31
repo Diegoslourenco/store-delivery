@@ -3,16 +3,23 @@ package com.gft.delivery.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.br.CPF;
+
+/**
+ * Cliente --- represents a client for the store.
+ * @author    Diego da Silva Lourenco
+ */
 
 @Entity
 @Table(name = "clientes")
@@ -40,6 +47,20 @@ public class Cliente implements Serializable {
 	
 	@Embedded
 	private Address address;
+	
+	@OneToOne(mappedBy = "cliente", cascade = CascadeType.REMOVE)
+	private Usuario usuario;
+	
+	public Cliente() {}
+
+	public Cliente(String cpf, String name, String phone,
+			String email, Address address) {		
+		this.cpf = cpf;
+		this.name = name;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+	}
 
 	public Long getId() {
 		return id;
@@ -88,7 +109,15 @@ public class Cliente implements Serializable {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+	/*
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	*/
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

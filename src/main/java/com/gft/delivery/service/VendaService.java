@@ -8,15 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.gft.delivery.assembler.VendaAssembler;
 import com.gft.delivery.dto.VendaDto;
 import com.gft.delivery.dto.VendaRequestDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
+import com.gft.delivery.exceptionhandler.ClienteNotSameException;
 import com.gft.delivery.exceptionhandler.EstoqueNotEnoughException;
 import com.gft.delivery.exceptionhandler.EstoqueNotFoundException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
+import com.gft.delivery.exceptionhandler.VendaAlreadyReceivedException;
 import com.gft.delivery.model.ItemVenda;
 import com.gft.delivery.model.Venda;
 import com.gft.delivery.model.VendaStatus;
@@ -87,6 +91,18 @@ public class VendaService {
 	public VendaDto update(Long id) {
 				
 		Venda vendaSaved = getById(id);
+		
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String userEmail = user.getUsername();
+		
+		if (!vendaSaved.getCliente().getEmail().equals(userEmail)) {
+			throw new ClienteNotSameException();
+		}
+		
+		if (vendaSaved.getStatus().ordinal() == 1) {
+			throw new VendaAlreadyReceivedException();
+		}
+		
 		vendaSaved.setStatus(VendaStatus.CONCLUIDO);
 		
 		return vendaAssembler.toModel(vendas.save(vendaSaved));

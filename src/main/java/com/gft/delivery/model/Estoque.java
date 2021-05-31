@@ -1,6 +1,7 @@
 package com.gft.delivery.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class Estoque implements Serializable {
 	private int quantity;
 	
 	@Column(name = "selling_price")
-	private Double sellingPrice;
+	private BigDecimal sellingPrice;
 
 	public Long getId() {
 		return id;
@@ -62,11 +63,11 @@ public class Estoque implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public double getSellingPrice() {
+	public BigDecimal getSellingPrice() {
 		return sellingPrice;
 	}
 
-	public void setSellingPrice(double sellingPrice) {
+	public void setSellingPrice(BigDecimal sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 

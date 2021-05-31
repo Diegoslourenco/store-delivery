@@ -145,6 +145,17 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ ClienteNotSameException.class })
+	public ResponseEntity<Object> handleClienteNotSameException(ClienteNotSameException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("cliente.not-same", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({ FornecedorEmailNotUniqueException.class })
 	public ResponseEntity<Object> handleFornecedorEmailNotUniqueException(FornecedorEmailNotUniqueException ex, WebRequest request) {
 		
@@ -193,6 +204,28 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 	public ResponseEntity<Object> handleEstoqueNotEnoughException(EstoqueNotEnoughException ex, WebRequest request) {
 		
 		String message = messageSource.getMessage("estoque.not-enough", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ VendaAlreadyReceivedException.class })
+	public ResponseEntity<Object> handleVendaAlreadyReceivedException(VendaAlreadyReceivedException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("venda.already-received", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ AuthException.class })
+	public ResponseEntity<Object> handleAuthException(AuthException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("auth.user-or-password-incorrect", null, LocaleContextHolder.getLocale());
 		String description = ex.toString();
 		
 		List<Error> errors = Arrays.asList(new Error(message, description));
