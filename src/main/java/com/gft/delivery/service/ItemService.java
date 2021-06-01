@@ -17,13 +17,13 @@ import com.gft.delivery.repository.ItemVendaRepository;
 public class ItemService {
 	
 	@Autowired
-	ItemCompraRepository itensCompra;
+	private ItemCompraRepository itensCompra;
 	
 	@Autowired
-	ItemVendaRepository itensVenda;
+	private ItemVendaRepository itensVenda;
 	
 	@Autowired
-	EstoqueService estoqueService;
+	private EstoqueService estoqueService;
 	
 	public void saveCompra(ItemCompra itemCompra) {	
 		itensCompra.save(itemCompra);	
@@ -50,7 +50,7 @@ public class ItemService {
 		}	
 	}
 	
-	public void saveItemVendaList(List<ItemVenda> itens, Venda venda) {
+	public List<ItemVenda> saveItemVendaList(List<ItemVenda> itens, Venda venda) {
 		
 		for (ItemVenda itemVenda : itens) {
 			
@@ -61,7 +61,9 @@ public class ItemService {
 			this.saveVenda(itemVenda);
 			
 			estoqueService.updateQuantity(itemVenda.getProduto().getId(), -itemVenda.getQuantity());
-		}	
+		}
+		
+		return itens;	
 	}
 
 }

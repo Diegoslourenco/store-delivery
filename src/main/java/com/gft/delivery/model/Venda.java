@@ -44,6 +44,13 @@ public class Venda implements Serializable {
 	
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
 	private List<ItemVenda> itens;
+	
+	public Venda() {}
+	
+	public Venda(Cliente cliente, VendaStatus status) {
+		this.cliente = cliente;
+		this.status = status;
+	}
 
 	public Long getId() {
 		return id;

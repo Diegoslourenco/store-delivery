@@ -19,7 +19,7 @@ import com.gft.delivery.repository.EstoqueRepository;
 public class EstoqueService {
 	
 	@Autowired
-	EstoqueAssembler estoqueAssembler;
+	private EstoqueAssembler estoqueAssembler;
 	
 	@Autowired
 	private EstoqueRepository estoques;
@@ -38,7 +38,7 @@ public class EstoqueService {
 		
 		estoque.setProduto(itemCompra.getProduto());
 		estoque.setQuantity(itemCompra.getQuantity());
-		estoque.setSellingPrice(new BigDecimal(0.00));
+		estoque.setSellingPrice(BigDecimal.ZERO);
 			
 		estoques.save(estoque);
 	}

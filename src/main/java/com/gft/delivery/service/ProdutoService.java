@@ -26,7 +26,7 @@ import com.gft.delivery.repository.ProdutoRepository;
 public class ProdutoService {
 	
 	@Autowired
-	ProdutoAssembler produtoAssembler;
+	private ProdutoAssembler produtoAssembler;
 	
 	@Autowired
 	private ProdutoRepository produtos;

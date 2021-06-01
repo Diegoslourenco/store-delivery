@@ -26,7 +26,7 @@ import com.gft.delivery.repository.FornecedorRepository;
 public class FornecedorService {
 	
 	@Autowired
-	FornecedorAssembler fornecedorAssembler;
+	private FornecedorAssembler fornecedorAssembler;
 	
 	@Autowired
 	private FornecedorRepository fornecedores;

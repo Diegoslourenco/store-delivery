@@ -1,5 +1,7 @@
 package com.gft.delivery.service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,30 +26,38 @@ import com.gft.delivery.exceptionhandler.EstoqueNotFoundException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.exceptionhandler.VendaAlreadyReceivedException;
 import com.gft.delivery.model.ItemVenda;
+import com.gft.delivery.model.Usuario;
 import com.gft.delivery.model.Venda;
 import com.gft.delivery.model.VendaStatus;
+import com.gft.delivery.repository.UsuarioRepository;
 import com.gft.delivery.repository.VendaRepository;
 
 @Service
 public class VendaService {
 	
 	@Autowired
-	VendaAssembler vendaAssembler;
+	private VendaAssembler vendaAssembler;
 	
 	@Autowired
-	VendaRepository vendas;
+	private VendaRepository vendas;
 	
 	@Autowired
-	EstoqueService estoqueService;
+	private UsuarioRepository usuarios;
 	
 	@Autowired
-	ItemService itemService;
+	private EstoqueService estoqueService;
 	
 	@Autowired
-	ProdutoService produtoService;
+	private ItemService itemService;
+	
+	@Autowired
+	private ProdutoService produtoService;
 	
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	public CollectionModel<VendaDto> search() {
 		return vendaAssembler.toCollectionModel(vendas.findAll());
@@ -57,37 +69,23 @@ public class VendaService {
 	
 	public VendaDto save(VendaRequestDto vendaRequest, HttpServletResponse response) {
 		
-		for (ItemVenda itemVenda : vendaRequest.getItens()) {
+		checkItens(vendaRequest.getItens());
 			
-			Long itemId = itemVenda.getProduto().getId();
-			
-			if (!produtoService.produtoExists(itemId)) {
-				throw new ProdutoNotFoundException();			
-			}
-			
-			if (!estoqueService.estoqueExists(itemId)) {
-				throw new EstoqueNotFoundException();				
-			}
-			
-			if ((estoqueService.getById(itemId).getQuantity() - itemVenda.getQuantity()) < 0) {
-				throw new EstoqueNotEnoughException();
-			}
-		}
-		
-		Venda venda = new Venda();
-		venda.setCliente(vendaRequest.getCliente());
-		venda.setStatus(VendaStatus.PENDENTE);
-	
+		Venda venda = new Venda(vendaRequest.getCliente(), VendaStatus.PENDENTE);
 		Venda vendaSaved = vendas.save(venda);
 				
 		// Updating quantity and saving ItemCompra list
-		itemService.saveItemVendaList(vendaRequest.getItens(), vendaSaved);
+		List<ItemVenda> itens = itemService.saveItemVendaList(vendaRequest.getItens(), vendaSaved);
+		
+		// Get user details and send receipt by email
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+		sendEmail(user.getUsername(), itens);
 		
 		publisher.publishEvent(new ResourceCreatedEvent(this, response, vendaSaved.getId()));
 		
 		return vendaAssembler.toModel(vendaSaved);
 	}
-	
+
 	public VendaDto update(Long id) {
 				
 		Venda vendaSaved = getById(id);
@@ -116,6 +114,58 @@ public class VendaService {
 		}
 		
 		return vendaSaved.get();
+	}
+	
+	private void checkItens(List<ItemVenda> itens) {
+		for (ItemVenda itemVenda : itens) {
+			
+			Long itemId = itemVenda.getProduto().getId();
+			
+			if (!produtoService.produtoExists(itemId)) {
+				throw new ProdutoNotFoundException();			
+			}
+			
+			if (!estoqueService.estoqueExists(itemId)) {
+				throw new EstoqueNotFoundException();				
+			}
+			
+			if ((estoqueService.getById(itemId).getQuantity() - itemVenda.getQuantity()) < 0) {
+				throw new EstoqueNotEnoughException();
+			}
+		}
+		
+	}
+	
+	private void sendEmail(String email, List<ItemVenda> itens) {
+		
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		
+		Usuario usuarioSaved = usuarios.findByEmail(email).get();
+		
+		// Writing email message
+		String emailText = "";
+		BigDecimal total = BigDecimal.ZERO;
+		emailText = emailText.concat("Olá, " + usuarioSaved.getCliente().getName() + "!\n" +
+						"\nSegue recibo dos itens comprados em nossa loja para sua comodidade!");
+		
+		for (ItemVenda item : itens) { 		
+			emailText = emailText.concat("\n\nProduto: " + produtoService.getOne(item.getProduto().getId()).getName()  +
+										 "\nQuantidade: " + item.getQuantity() +
+										 "\nValor:  R$ " + item.getPrice());
+			total = total.add(item.getPrice().multiply(new BigDecimal(item.getQuantity())));
+		}
+		
+		emailText = emailText.concat("\n\nTotal: R$ " + total);
+		emailText = emailText.concat("\n\nVolte sempre!");		
+		
+		// Setting email
+		simpleMailMessage.setFrom("imobgft@gmail.com");
+		simpleMailMessage.setTo(email);
+		simpleMailMessage.setSubject("Recibo da compra realizada por " + usuarioSaved.getCliente().getName() +  "!");
+		simpleMailMessage.setText(emailText);
+		
+		// Sending email
+		mailSender.send(simpleMailMessage);	
 	}
 
 }
