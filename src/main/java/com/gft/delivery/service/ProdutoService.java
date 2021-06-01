@@ -1,5 +1,6 @@
 package com.gft.delivery.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,10 @@ import com.gft.delivery.assembler.ProdutoAssembler;
 import com.gft.delivery.dto.ProdutoDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.ProdutoNameNotUniqueException;
+import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.model.Produto;
 import com.gft.delivery.repository.ProdutoRepository;
+import com.gft.delivery.repository.filter.ProdutoFilter;
 
 @Service
 public class ProdutoService {
@@ -36,18 +39,38 @@ public class ProdutoService {
 	
 	private final String CLIENTE = "CLIENTE";
 	
-	public CollectionModel<ProdutoDto> search() {
+	public CollectionModel<ProdutoDto> search(ProdutoFilter filter) {
+				
+		List<Produto> allProdutos = filterByStock(produtos.filter(filter));
 		
-		List<Produto> allProdutos = produtos.findAll();
+		return produtoAssembler.toCollectionModel(allProdutos);
+	}
+	
+	public CollectionModel<ProdutoDto> searchByName(String name) {
 		
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		if (StringUtils.contains(user.getAuthorities().toString(), CLIENTE)) {
-					
-			allProdutos.removeIf(produto -> 
-								produto.getEstoque().getQuantity() == 0 ||
-								produto.getEstoque().getSellingPrice().doubleValue() == 0);
+		List<Produto> allProdutos = produtos.findByNameContainingOrderByNameAsc(name.toLowerCase());
+			
+		if (allProdutos.isEmpty()) {
+			throw new ProdutoNotFoundException();
 		}
+		
+		return produtoAssembler.toCollectionModel(allProdutos);
+	}
+
+	public CollectionModel<ProdutoDto> searchWithNameAsc(ProdutoFilter filter) {
+		
+		List<Produto> allProdutos = filterByStock(produtos.filter(filter));
+		
+		allProdutos.sort(Comparator.comparing(Produto::getName));	
+		
+		return produtoAssembler.toCollectionModel(allProdutos);
+	}
+	
+	public CollectionModel<ProdutoDto> searchWithNameDesc(ProdutoFilter filter) {
+		
+		List<Produto> allProdutos = filterByStock(produtos.filter(filter));
+		
+		allProdutos.sort(Comparator.comparing(Produto::getName).reversed());	
 		
 		return produtoAssembler.toCollectionModel(allProdutos);
 	}
@@ -98,6 +121,20 @@ public class ProdutoService {
 		}
 		
 		return produtoSaved.get();
+	}
+	
+	private List<Produto> filterByStock(List<Produto> allProdutos) {
+		
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (StringUtils.contains(user.getAuthorities().toString(), CLIENTE)) {
+					
+			allProdutos.removeIf(produto -> 
+								produto.getEstoque().getQuantity() == 0 ||
+								produto.getEstoque().getSellingPrice().doubleValue() == 0);
+		}
+		
+		return allProdutos;
 	}
 	
 	private boolean checkUniqueName(Produto novoProduto) {

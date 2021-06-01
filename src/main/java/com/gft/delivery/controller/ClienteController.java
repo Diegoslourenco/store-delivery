@@ -23,7 +23,7 @@ import com.gft.delivery.model.Cliente;
 import com.gft.delivery.service.ClienteService;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
 	@Autowired

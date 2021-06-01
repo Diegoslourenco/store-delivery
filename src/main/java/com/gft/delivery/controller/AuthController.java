@@ -18,7 +18,7 @@ import com.gft.delivery.exceptionhandler.AuthException;
 import com.gft.delivery.service.TokenService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 	
 	@Autowired

@@ -40,7 +40,7 @@ public class ProdutoAssembler extends RepresentationModelAssemblerSupport<Produt
 
 		CollectionModel<ProdutoDto> resources = super.toCollectionModel(allProdutos);
 		
-		resources.add(linkTo(methodOn(ProdutoController.class).search()).withSelfRel());
+		resources.add(linkTo(methodOn(ProdutoController.class).search(null)).withSelfRel());
 		
 		return resources;
 	}

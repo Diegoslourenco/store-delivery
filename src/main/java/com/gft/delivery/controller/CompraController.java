@@ -20,7 +20,7 @@ import com.gft.delivery.dto.CompraRequestDto;
 import com.gft.delivery.service.CompraService;
 
 @RestController
-@RequestMapping("/compras")
+@RequestMapping("/api/compras")
 @PreAuthorize("hasRole('LOJA')")
 public class CompraController {
 

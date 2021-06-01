@@ -19,7 +19,7 @@ import com.gft.delivery.dto.ProdutoPriceDto;
 import com.gft.delivery.service.EstoqueService;
 
 @RestController
-@RequestMapping("/estoques")
+@RequestMapping("/api/estoques")
 @PreAuthorize("hasRole('LOJA')")
 public class EstoqueController {
 

@@ -22,7 +22,7 @@ import com.gft.delivery.model.Fornecedor;
 import com.gft.delivery.service.FornecedorService;
 
 @RestController
-@RequestMapping("/fornecedores")
+@RequestMapping("/api/fornecedores")
 @PreAuthorize("hasRole('LOJA')")
 public class FornecedorController {
 

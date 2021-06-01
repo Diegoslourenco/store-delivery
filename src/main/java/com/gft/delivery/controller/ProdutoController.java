@@ -19,18 +19,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.delivery.dto.ProdutoDto;
 import com.gft.delivery.model.Produto;
+import com.gft.delivery.repository.filter.ProdutoFilter;
 import com.gft.delivery.service.ProdutoService;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
 public class ProdutoController {
 	
 	@Autowired
 	private ProdutoService produtoService;
 	
 	@GetMapping
-	public ResponseEntity<CollectionModel<ProdutoDto>> search() {	
-		return new ResponseEntity<CollectionModel<ProdutoDto>>(produtoService.search(), HttpStatus.OK);	
+	public ResponseEntity<CollectionModel<ProdutoDto>> search(ProdutoFilter filter) {	
+		return new ResponseEntity<CollectionModel<ProdutoDto>>(produtoService.search(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/asc")
+	public ResponseEntity<CollectionModel<ProdutoDto>> searchWithNameAsc(ProdutoFilter filter) {
+		return new ResponseEntity<CollectionModel<ProdutoDto>>(produtoService.searchWithNameAsc(filter), HttpStatus.OK);
+	}
+	
+	@GetMapping("/desc")
+	public ResponseEntity<CollectionModel<ProdutoDto>> searchWithNameDesc(ProdutoFilter filter) {
+		return new ResponseEntity<CollectionModel<ProdutoDto>>(produtoService.searchWithNameDesc(filter), HttpStatus.OK);
+	}
+	
+	@GetMapping("/nome/{name}")
+	public ResponseEntity<CollectionModel<ProdutoDto>> searchByName(@PathVariable String name) {
+		return new ResponseEntity<CollectionModel<ProdutoDto>>(produtoService.searchByName(name), HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('LOJA')")

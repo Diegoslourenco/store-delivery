@@ -21,7 +21,7 @@ import com.gft.delivery.dto.VendaRequestDto;
 import com.gft.delivery.service.VendaService;
 
 @RestController
-@RequestMapping("/vendas")
+@RequestMapping("/api/vendas")
 public class VendaController {
 	
 	@Autowired
