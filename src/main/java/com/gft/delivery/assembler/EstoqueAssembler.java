@@ -40,7 +40,7 @@ public class EstoqueAssembler extends RepresentationModelAssemblerSupport<Estoqu
 
 		CollectionModel<EstoqueDto> resources = super.toCollectionModel(allEstoques);
 		
-		resources.add(linkTo(methodOn(EstoqueController.class).search()).withSelfRel());
+		resources.add(linkTo(methodOn(EstoqueController.class).search(null)).withSelfRel());
 		
 		return resources;
 	}
