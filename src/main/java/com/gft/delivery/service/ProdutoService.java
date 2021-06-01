@@ -43,18 +43,14 @@ public class ProdutoService {
 				
 		List<Produto> allProdutos = filterByStock(produtos.filter(filter));
 		
-		return produtoAssembler.toCollectionModel(allProdutos);
+		return produtoAssembler.toCollectionModel(checkEmptyList(allProdutos));
 	}
 	
 	public CollectionModel<ProdutoDto> searchByName(String name) {
 		
 		List<Produto> allProdutos = produtos.findByNameContainingOrderByNameAsc(name.toLowerCase());
-			
-		if (allProdutos.isEmpty()) {
-			throw new ProdutoNotFoundException();
-		}
 		
-		return produtoAssembler.toCollectionModel(allProdutos);
+		return produtoAssembler.toCollectionModel(checkEmptyList(allProdutos));
 	}
 
 	public CollectionModel<ProdutoDto> searchWithNameAsc(ProdutoFilter filter) {
@@ -63,7 +59,7 @@ public class ProdutoService {
 		
 		allProdutos.sort(Comparator.comparing(Produto::getName));	
 		
-		return produtoAssembler.toCollectionModel(allProdutos);
+		return produtoAssembler.toCollectionModel(checkEmptyList(allProdutos));
 	}
 	
 	public CollectionModel<ProdutoDto> searchWithNameDesc(ProdutoFilter filter) {
@@ -72,7 +68,7 @@ public class ProdutoService {
 		
 		allProdutos.sort(Comparator.comparing(Produto::getName).reversed());	
 		
-		return produtoAssembler.toCollectionModel(allProdutos);
+		return produtoAssembler.toCollectionModel(checkEmptyList(allProdutos));
 	}
 
 	public ProdutoDto getOne(Long id) {
@@ -148,6 +144,15 @@ public class ProdutoService {
 		}
 		
 		return true;	
+	}
+	
+	private List<Produto> checkEmptyList(List<Produto> list) {
+
+		if (list.isEmpty()) {
+			throw new ProdutoNotFoundException();
+		}
+		
+		return list;
 	}
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.gft.delivery.assembler.EstoqueAssembler;
 import com.gft.delivery.dto.EstoqueDto;
 import com.gft.delivery.dto.ProdutoPriceDto;
+import com.gft.delivery.exceptionhandler.EstoqueNotFoundException;
 import com.gft.delivery.model.Estoque;
 import com.gft.delivery.model.ItemCompra;
 import com.gft.delivery.model.Produto;
@@ -34,7 +35,7 @@ public class EstoqueService {
 	private ProdutoRepository produtos;
 	
 	public CollectionModel<EstoqueDto> search(ProdutoFilter filter) {	
-		return estoqueAssembler.toCollectionModel(filterByProduct(filter));
+		return estoqueAssembler.toCollectionModel(checkEmptyList(filterByProduct(filter)));
 	}
 
 	public CollectionModel<EstoqueDto> searchWithQuantityAsc(ProdutoFilter filter) {
@@ -43,7 +44,7 @@ public class EstoqueService {
 		
 		allEstoques.sort(Comparator.comparing(Estoque::getQuantity));
 		
-		return estoqueAssembler.toCollectionModel(allEstoques);
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
 	}
 	
 	public CollectionModel<EstoqueDto> searchWithQuantityDesc(ProdutoFilter filter) {
@@ -52,7 +53,7 @@ public class EstoqueService {
 		
 		allEstoques.sort(Comparator.comparing(Estoque::getQuantity).reversed());
 		
-		return estoqueAssembler.toCollectionModel(allEstoques);
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
 	}
 	
 	public CollectionModel<EstoqueDto> searchWithPriceAsc(ProdutoFilter filter) {
@@ -61,7 +62,7 @@ public class EstoqueService {
 		
 		allEstoques.sort(Comparator.comparing(Estoque::getSellingPrice));
 		
-		return estoqueAssembler.toCollectionModel(allEstoques);
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
 	}
 	
 	public CollectionModel<EstoqueDto> searchWithPriceDesc(ProdutoFilter filter) {
@@ -70,7 +71,7 @@ public class EstoqueService {
 		
 		allEstoques.sort(Comparator.comparing(Estoque::getSellingPrice).reversed());
 		
-		return estoqueAssembler.toCollectionModel(allEstoques);
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
 	}
 
 	public EstoqueDto getOne(Long id) {
@@ -139,6 +140,15 @@ public class EstoqueService {
 		}
 		
 		return allEstoques;
+	}
+	
+	private List<Estoque> checkEmptyList(List<Estoque> list) {
+
+		if (list.isEmpty()) {
+			throw new EstoqueNotFoundException();
+		}
+		
+		return list;
 	}
 
 }

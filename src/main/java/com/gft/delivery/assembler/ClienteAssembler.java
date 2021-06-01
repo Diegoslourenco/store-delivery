@@ -42,7 +42,7 @@ public class ClienteAssembler extends RepresentationModelAssemblerSupport<Client
 	
 		CollectionModel<ClienteDto> resources = super.toCollectionModel(allClientes);
 		
-		resources.add(linkTo(methodOn(ClienteController.class).search()).withSelfRel());
+		resources.add(linkTo(methodOn(ClienteController.class).search(null)).withSelfRel());
 		
 		return resources;
 	}

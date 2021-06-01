@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gft.delivery.dto.ClienteDto;
 import com.gft.delivery.dto.ClienteRequestDto;
 import com.gft.delivery.model.Cliente;
+import com.gft.delivery.repository.filter.ClienteFilter;
 import com.gft.delivery.service.ClienteService;
 
 @RestController
@@ -31,8 +32,20 @@ public class ClienteController {
 	
 	@PreAuthorize("hasRole('LOJA')")
 	@GetMapping
-	public ResponseEntity<CollectionModel<ClienteDto>> search() {	
-		return new ResponseEntity<CollectionModel<ClienteDto>>(clienteService.search(), HttpStatus.OK);	
+	public ResponseEntity<CollectionModel<ClienteDto>> search(ClienteFilter filter) {	
+		return new ResponseEntity<CollectionModel<ClienteDto>>(clienteService.search(filter), HttpStatus.OK);	
+	}
+	
+	@PreAuthorize("hasRole('LOJA')")
+	@GetMapping("/nome/asc")
+	public ResponseEntity<CollectionModel<ClienteDto>> searchWithNameAsc(ClienteFilter filter) {	
+		return new ResponseEntity<CollectionModel<ClienteDto>>(clienteService.searchWithNameAsc(filter), HttpStatus.OK);	
+	}
+	
+	@PreAuthorize("hasRole('LOJA')")
+	@GetMapping("/nome/desc")
+	public ResponseEntity<CollectionModel<ClienteDto>> searchWithNameDesc(ClienteFilter filter) {	
+		return new ResponseEntity<CollectionModel<ClienteDto>>(clienteService.searchWithNameDesc(filter), HttpStatus.OK);	
 	}
 	
 	@PreAuthorize("hasRole('LOJA')")

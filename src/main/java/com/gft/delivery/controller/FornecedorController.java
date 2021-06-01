@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.delivery.dto.FornecedorDto;
 import com.gft.delivery.model.Fornecedor;
+import com.gft.delivery.repository.filter.FornecedorFilter;
 import com.gft.delivery.service.FornecedorService;
 
 @RestController
@@ -30,8 +31,18 @@ public class FornecedorController {
 	private FornecedorService fornecedorService;
 	
 	@GetMapping
-	public ResponseEntity<CollectionModel<FornecedorDto>> search() {	
-		return new ResponseEntity<CollectionModel<FornecedorDto>>(fornecedorService.search(), HttpStatus.OK);	
+	public ResponseEntity<CollectionModel<FornecedorDto>> search(FornecedorFilter filter) {	
+		return new ResponseEntity<CollectionModel<FornecedorDto>>(fornecedorService.search(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/nome/asc")
+	public ResponseEntity<CollectionModel<FornecedorDto>> searchWithNameAsc(FornecedorFilter filter) {	
+		return new ResponseEntity<CollectionModel<FornecedorDto>>(fornecedorService.searchWithNameAsc(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/nome/desc")
+	public ResponseEntity<CollectionModel<FornecedorDto>> searchWithNameDesc(FornecedorFilter filter) {	
+		return new ResponseEntity<CollectionModel<FornecedorDto>>(fornecedorService.searchWithNameDesc(filter), HttpStatus.OK);	
 	}
 	
 	@GetMapping("/{id}")
