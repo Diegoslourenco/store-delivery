@@ -54,16 +54,35 @@ public class CompraService {
 	public CollectionModel<CompraDto> search(FornecedorFilter filter) {
 		return compraAssembler.toCollectionModel(checkEmptyList(filterByFornecedor(filter)));
 	}
-	
-	public CollectionModel<CompraDto> searchFinished(FornecedorFilter filter) {
-		return compraAssembler.toCollectionModel(checkEmptyList(filterByFornecedor(filter)));
-	}
 
 	public CompraDto getOne(Long id) {
 		return compraAssembler.toModel(getById(id));
 	}
 	
 	public CompraDto save(CompraRequestDto compraRequest, HttpServletResponse response) {
+		
+		checkValidCompra(compraRequest);
+	
+		Compra compraSaved = compras.save(new Compra(compraRequest.getFornecedor()));
+				
+		// Updating quantities and saving ItemCompra list
+		itemService.saveItemCompraList(compraRequest.getItens(), compraSaved);
+		
+		publisher.publishEvent(new ResourceCreatedEvent(this, response, compraSaved.getId()));
+		
+		return compraAssembler.toModel(compraSaved);
+	}
+	
+	private List<Compra> checkEmptyList(List<Compra> list) {
+
+		if (list.isEmpty()) {
+			throw new CompraNotFoundException();
+		}
+		
+		return list;
+	}
+
+	private void checkValidCompra(CompraRequestDto compraRequest) {
 		
 		if (!fornecedorService.fornecedorExists(compraRequest.getFornecedor().getId())) {
 			throw new FornecedorNotFoundException();	
@@ -74,18 +93,6 @@ public class CompraService {
 				throw new ProdutoNotFoundException();			
 			}
 		}
-		
-		Compra compra = new Compra();
-		compra.setFornecedor(compraRequest.getFornecedor());
-	
-		Compra compraSaved = compras.save(compra);
-				
-		// Updating quantity and saving ItemCompra list
-		itemService.saveItemCompraList(compraRequest.getItens(), compraSaved);
-		
-		publisher.publishEvent(new ResourceCreatedEvent(this, response, compraSaved.getId()));
-		
-		return compraAssembler.toModel(compraSaved);
 	}
 
 	private Compra getById(Long id) {
@@ -113,14 +120,4 @@ public class CompraService {
 		return allCompras;
 	}
 	
-	
-	private List<Compra> checkEmptyList(List<Compra> list) {
-
-		if (list.isEmpty()) {
-			throw new CompraNotFoundException();
-		}
-		
-		return list;
-	}
-
 }

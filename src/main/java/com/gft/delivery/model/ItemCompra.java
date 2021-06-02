@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * ItemCompra --- represents an item in a buy or sale list.
+ * ItemCompra --- represents an item in a buy list.
  * @author    Diego da Silva Lourenco
  */
 

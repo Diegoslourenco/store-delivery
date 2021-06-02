@@ -80,13 +80,9 @@ public class EstoqueService {
 	
 	public void save(ItemCompra itemCompra) {
 		
-		Estoque estoque = new Estoque();
-		
-		estoque.setProduto(itemCompra.getProduto());
-		estoque.setQuantity(itemCompra.getQuantity());
-		estoque.setSellingPrice(BigDecimal.ZERO);
-			
-		estoques.save(estoque);
+		estoques.save(new Estoque(itemCompra.getProduto(),
+								itemCompra.getQuantity(),
+								BigDecimal.ZERO));
 	}
 	
 	public EstoqueDto updatePrice(Long id, ProdutoPriceDto price) {
@@ -101,6 +97,7 @@ public class EstoqueService {
 		
 		Estoque estoqueSaved = estoques.findByProdutoId(produtoId).get();
 		
+		// For a buy it increases and for a sell it decreases the quantity
 		estoqueSaved.setQuantity(estoqueSaved.getQuantity() + quantity);
 		
 		estoques.save(estoqueSaved);
@@ -129,6 +126,15 @@ public class EstoqueService {
 		return estoques.findByProdutoId(produtoId);
 	}
 	
+	private List<Estoque> checkEmptyList(List<Estoque> list) {
+
+		if (list.isEmpty()) {
+			throw new EstoqueNotFoundException();
+		}
+		
+		return list;
+	}
+	
 	private List<Estoque> filterByProduct(ProdutoFilter filter) {
 		
 		List<Produto> allProdutos = produtos.filter(filter);
@@ -142,13 +148,4 @@ public class EstoqueService {
 		return allEstoques;
 	}
 	
-	private List<Estoque> checkEmptyList(List<Estoque> list) {
-
-		if (list.isEmpty()) {
-			throw new EstoqueNotFoundException();
-		}
-		
-		return list;
-	}
-
 }

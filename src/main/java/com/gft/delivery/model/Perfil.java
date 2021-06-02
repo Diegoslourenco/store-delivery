@@ -8,6 +8,11 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * Perfil --- represents a role for a user in the system.
+ * @author    Diego da Silva Lourenco
+ */
+
 @Entity
 @Table(name = "perfis")
 public class Perfil implements GrantedAuthority {

@@ -39,18 +39,14 @@ public class ProdutoService {
 	
 	private final String CLIENTE = "CLIENTE";
 	
-	public CollectionModel<ProdutoDto> search(ProdutoFilter filter) {
-				
-		List<Produto> allProdutos = filterByStock(produtos.filter(filter));
-		
-		return produtoAssembler.toCollectionModel(checkEmptyList(allProdutos));
+	public CollectionModel<ProdutoDto> search(ProdutoFilter filter) {		
+		return produtoAssembler.toCollectionModel(
+				checkEmptyList(filterByStock(produtos.filter(filter))));
 	}
 	
-	public CollectionModel<ProdutoDto> searchByName(String name) {
-		
-		List<Produto> allProdutos = produtos.findByNameContainingOrderByNameAsc(name.toLowerCase());
-		
-		return produtoAssembler.toCollectionModel(checkEmptyList(allProdutos));
+	public CollectionModel<ProdutoDto> searchByName(String name) {		
+		return produtoAssembler.toCollectionModel(
+				checkEmptyList(produtos.findByNameContainingOrderByNameAsc(name.toLowerCase())));
 	}
 
 	public CollectionModel<ProdutoDto> searchWithNameAsc(ProdutoFilter filter) {
@@ -77,9 +73,7 @@ public class ProdutoService {
 	
 	public ProdutoDto save(Produto produto, HttpServletResponse response) {
 		
-		if (!checkUniqueName(produto)) {
-			throw new ProdutoNameNotUniqueException();
-		}
+		checkProduto(produto);
 			
 		Produto produtoSaved = produtos.save(produto);
 		
@@ -87,12 +81,10 @@ public class ProdutoService {
 		
 		return produtoAssembler.toModel(produtoSaved);
 	}
-	
+
 	public ProdutoDto update(Long id, Produto produto) {
 		
-		if (!checkUniqueName(produto)) {
-			throw new ProdutoNameNotUniqueException();
-		}
+		checkProduto(produto);
 		
 		Produto produtoSaved = getById(id);
 		
@@ -107,6 +99,35 @@ public class ProdutoService {
 	
 	public boolean produtoExists(Long id) {
 		return produtos.existsById(id);	
+	}
+	
+	private List<Produto> checkEmptyList(List<Produto> list) {
+
+		if (list.isEmpty()) {
+			throw new ProdutoNotFoundException();
+		}
+		
+		return list;
+	}
+	
+	private void checkProduto(Produto produto) {
+		
+		if (!checkUniqueName(produto)) {
+			throw new ProdutoNameNotUniqueException();
+		}	
+	}
+	
+	private boolean checkUniqueName(Produto novoProduto) {
+		List<Produto> allProdutos = produtos.findAll();
+		
+		for (Produto produto : allProdutos) {
+			
+			if (produto.getName().equals(novoProduto.getName())) {
+				return false;
+			}	
+		}
+		
+		return true;	
 	}
 
 	private Produto getById(Long id) {
@@ -133,26 +154,4 @@ public class ProdutoService {
 		return allProdutos;
 	}
 	
-	private boolean checkUniqueName(Produto novoProduto) {
-		List<Produto> allProdutos = produtos.findAll();
-		
-		for (Produto produto : allProdutos) {
-			
-			if (produto.getName().equals(novoProduto.getName())) {
-				return false;
-			}	
-		}
-		
-		return true;	
-	}
-	
-	private List<Produto> checkEmptyList(List<Produto> list) {
-
-		if (list.isEmpty()) {
-			throw new ProdutoNotFoundException();
-		}
-		
-		return list;
-	}
-
 }

@@ -6,12 +6,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,13 +47,13 @@ public class VendaService {
 	private VendaAssembler vendaAssembler;
 	
 	@Autowired
-	private VendaRepository vendas;
-	
-	@Autowired
 	private ClienteRepository clientes;
 	
 	@Autowired
 	private UsuarioRepository usuarios;
+	
+	@Autowired
+	private VendaRepository vendas;
 	
 	@Autowired
 	private EstoqueService estoqueService;
@@ -98,19 +100,18 @@ public class VendaService {
 		return vendaAssembler.toModel(getById(id));
 	}
 	
-	public VendaDto save(VendaRequestDto vendaRequest, HttpServletResponse response) {
+	public VendaDto save(VendaRequestDto vendaRequest, HttpServletResponse response) throws MessagingException {
 		
 		checkItens(vendaRequest.getItens());
-			
-		Venda venda = new Venda(vendaRequest.getCliente(), VendaStatus.PENDENTE);
-		Venda vendaSaved = vendas.save(venda);
+		
+		Venda vendaSaved = vendas.save(new Venda(vendaRequest.getCliente(), VendaStatus.PENDENTE));
 				
 		// Updating quantity and saving ItemCompra list
 		List<ItemVenda> itens = itemService.saveItemVendaList(vendaRequest.getItens(), vendaSaved);
 		
 		// Get user details and send receipt by email
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
-		sendEmail(user.getUsername(), itens);
+		sendEmail(user.getUsername(), itens) ;
 		
 		publisher.publishEvent(new ResourceCreatedEvent(this, response, vendaSaved.getId()));
 		
@@ -121,6 +122,15 @@ public class VendaService {
 				
 		Venda vendaSaved = getById(id);
 		
+		checkVenda(vendaSaved);
+		
+		vendaSaved.setStatus(VendaStatus.CONCLUIDO);
+		
+		return vendaAssembler.toModel(vendas.save(vendaSaved));
+	}
+	
+	private void checkVenda(Venda vendaSaved) {
+
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String userEmail = user.getUsername();
 		
@@ -131,20 +141,15 @@ public class VendaService {
 		if (vendaSaved.getStatus().ordinal() == 1) {
 			throw new VendaAlreadyReceivedException();
 		}
-		
-		vendaSaved.setStatus(VendaStatus.CONCLUIDO);
-		
-		return vendaAssembler.toModel(vendas.save(vendaSaved));
 	}
 	
-	private Venda getById(Long id) {
-		Optional<Venda> vendaSaved = vendas.findById(id);
-		
-		if (vendaSaved.isEmpty()) {
-			throw new EmptyResultDataAccessException(1);
+	private List<Venda> checkEmptyList(List<Venda> list) {
+
+		if (list.isEmpty()) {
+			throw new VendaNotFoundException();
 		}
 		
-		return vendaSaved.get();
+		return list;
 	}
 	
 	private void checkItens(List<ItemVenda> itens) {
@@ -166,6 +171,16 @@ public class VendaService {
 		}
 		
 	}
+
+	private Venda getById(Long id) {
+		Optional<Venda> vendaSaved = vendas.findById(id);
+		
+		if (vendaSaved.isEmpty()) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		
+		return vendaSaved.get();
+	}	
 	
 	private List<Venda> filterByCliente(ClienteFilter filter) {
 
@@ -182,16 +197,7 @@ public class VendaService {
 		return allVendas;
 	}
 	
-	private List<Venda> checkEmptyList(List<Venda> list) {
-
-		if (list.isEmpty()) {
-			throw new VendaNotFoundException();
-		}
-		
-		return list;
-	}
-	
-	private void sendEmail(String email, List<ItemVenda> itens) {
+	private void sendEmail(String email, List<ItemVenda> itens) throws MessagingException {
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		
@@ -200,6 +206,7 @@ public class VendaService {
 		// Writing email message
 		String emailText = "";
 		BigDecimal total = BigDecimal.ZERO;
+		
 		emailText = emailText.concat("Olá, " + usuarioSaved.getCliente().getName() + "!\n" +
 						"\nSegue recibo dos itens comprados em nossa loja para sua comodidade!");
 		
@@ -220,7 +227,12 @@ public class VendaService {
 		simpleMailMessage.setText(emailText);
 		
 		// Sending email
-		mailSender.send(simpleMailMessage);	
+		try {
+			mailSender.send(simpleMailMessage);			
+		}
+		catch(MailException ex) {
+			System.err.println(ex.getMessage());
+		}		
 	}
 
 }

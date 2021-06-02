@@ -105,15 +105,14 @@ public class ClienteService {
 	public void delete(Long id) {
 		clientes.deleteById(id);
 	}
+	
+	private List<Cliente> checkEmptyList(List<Cliente> list) {
 
-	private Cliente getById(Long id) {
-		Optional<Cliente> clienteSaved = clientes.findById(id);
-		
-		if (clienteSaved.isEmpty()) {
-			throw new EmptyResultDataAccessException(1);
+		if (list.isEmpty()) {
+			throw new ClienteNotFoundException();
 		}
 		
-		return clienteSaved.get();
+		return list;
 	}
 	
 	private void checkUniqueCliente(Cliente novoCliente) {
@@ -148,13 +147,14 @@ public class ClienteService {
 		}	
 	}
 	
-	private List<Cliente> checkEmptyList(List<Cliente> list) {
-
-		if (list.isEmpty()) {
-			throw new ClienteNotFoundException();
+	private Cliente getById(Long id) {
+		Optional<Cliente> clienteSaved = clientes.findById(id);
+		
+		if (clienteSaved.isEmpty()) {
+			throw new EmptyResultDataAccessException(1);
 		}
 		
-		return list;
+		return clienteSaved.get();
 	}
 	
 }
