@@ -1,6 +1,8 @@
 package com.gft.delivery.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,12 +27,16 @@ import com.gft.delivery.exceptionhandler.EstoqueNotEnoughException;
 import com.gft.delivery.exceptionhandler.EstoqueNotFoundException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.exceptionhandler.VendaAlreadyReceivedException;
+import com.gft.delivery.exceptionhandler.VendaNotFoundException;
+import com.gft.delivery.model.Cliente;
 import com.gft.delivery.model.ItemVenda;
 import com.gft.delivery.model.Usuario;
 import com.gft.delivery.model.Venda;
 import com.gft.delivery.model.VendaStatus;
+import com.gft.delivery.repository.ClienteRepository;
 import com.gft.delivery.repository.UsuarioRepository;
 import com.gft.delivery.repository.VendaRepository;
+import com.gft.delivery.repository.filter.ClienteFilter;
 
 @Service
 public class VendaService {
@@ -40,6 +46,9 @@ public class VendaService {
 	
 	@Autowired
 	private VendaRepository vendas;
+	
+	@Autowired
+	private ClienteRepository clientes;
 	
 	@Autowired
 	private UsuarioRepository usuarios;
@@ -59,8 +68,30 @@ public class VendaService {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	public CollectionModel<VendaDto> search() {
-		return vendaAssembler.toCollectionModel(vendas.findAll());
+	public CollectionModel<VendaDto> search(ClienteFilter filter) {
+		return vendaAssembler.toCollectionModel(checkEmptyList(filterByCliente(filter)));
+	}
+	
+	public CollectionModel<VendaDto> searchFinished(ClienteFilter filter) {
+		
+		List<Venda> allVendas = checkEmptyList(filterByCliente(filter));
+		
+		return vendaAssembler.toCollectionModel(removeByStatus(allVendas, VendaStatus.PENDENTE.ordinal()));
+	}
+	
+	public CollectionModel<VendaDto> searchPending(ClienteFilter filter) {
+		
+		List<Venda> allVendas = checkEmptyList(filterByCliente(filter));
+		
+		return vendaAssembler.toCollectionModel(removeByStatus(allVendas, VendaStatus.CONCLUIDO.ordinal()));
+	}
+
+	private List<Venda> removeByStatus(List<Venda> allVendas, int status) {
+		
+		allVendas.removeIf(venda ->
+							venda.getStatus().ordinal() == status);
+				
+		return allVendas;
 	}
 
 	public VendaDto getOne(Long id) {
@@ -134,6 +165,30 @@ public class VendaService {
 			}
 		}
 		
+	}
+	
+	private List<Venda> filterByCliente(ClienteFilter filter) {
+
+		List<Cliente> allClientes = clientes.filter(filter);
+
+		List<Venda> allVendas = new ArrayList<>();
+		
+		for (Cliente cliente : allClientes) {
+			allVendas.addAll(vendas.findByClienteId(cliente.getId()));
+		}
+		
+		allVendas.sort(Comparator.comparing(Venda::getId));
+		
+		return allVendas;
+	}
+	
+	private List<Venda> checkEmptyList(List<Venda> list) {
+
+		if (list.isEmpty()) {
+			throw new VendaNotFoundException();
+		}
+		
+		return list;
 	}
 	
 	private void sendEmail(String email, List<ItemVenda> itens) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.delivery.dto.CompraDto;
 import com.gft.delivery.dto.CompraRequestDto;
+import com.gft.delivery.repository.filter.FornecedorFilter;
 import com.gft.delivery.service.CompraService;
 
 @RestController
@@ -28,8 +29,8 @@ public class CompraController {
 	private CompraService compraService;
 	
 	@GetMapping
-	public ResponseEntity<CollectionModel<CompraDto>> search() {	
-		return new ResponseEntity<CollectionModel<CompraDto>>(compraService.search(), HttpStatus.OK);	
+	public ResponseEntity<CollectionModel<CompraDto>> search(FornecedorFilter filter) {	
+		return new ResponseEntity<CollectionModel<CompraDto>>(compraService.search(filter), HttpStatus.OK);	
 	}
 	
 	@GetMapping("/{id}")

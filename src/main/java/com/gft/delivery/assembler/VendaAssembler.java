@@ -40,7 +40,7 @@ public class VendaAssembler extends RepresentationModelAssemblerSupport<Venda, V
 
 		CollectionModel<VendaDto> resources = super.toCollectionModel(allVendas);
 		
-		resources.add(linkTo(methodOn(VendaController.class).search()).withSelfRel());
+		resources.add(linkTo(methodOn(VendaController.class).search(null)).withSelfRel());
 		
 		return resources;
 	}

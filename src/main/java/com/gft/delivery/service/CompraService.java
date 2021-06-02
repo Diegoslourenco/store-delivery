@@ -1,5 +1,8 @@
 package com.gft.delivery.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,11 +17,15 @@ import com.gft.delivery.assembler.CompraAssembler;
 import com.gft.delivery.dto.CompraDto;
 import com.gft.delivery.dto.CompraRequestDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
+import com.gft.delivery.exceptionhandler.CompraNotFoundException;
 import com.gft.delivery.exceptionhandler.FornecedorNotFoundException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.model.Compra;
+import com.gft.delivery.model.Fornecedor;
 import com.gft.delivery.model.ItemCompra;
 import com.gft.delivery.repository.CompraRepository;
+import com.gft.delivery.repository.FornecedorRepository;
+import com.gft.delivery.repository.filter.FornecedorFilter;
 
 @Service
 public class CompraService {
@@ -28,6 +35,9 @@ public class CompraService {
 	
 	@Autowired
 	private CompraRepository compras;
+	
+	@Autowired
+	private FornecedorRepository fornecedores;
 	
 	@Autowired
 	private FornecedorService fornecedorService;
@@ -41,8 +51,12 @@ public class CompraService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
-	public CollectionModel<CompraDto> search() {
-		return compraAssembler.toCollectionModel(compras.findAll());
+	public CollectionModel<CompraDto> search(FornecedorFilter filter) {
+		return compraAssembler.toCollectionModel(checkEmptyList(filterByFornecedor(filter)));
+	}
+	
+	public CollectionModel<CompraDto> searchFinished(FornecedorFilter filter) {
+		return compraAssembler.toCollectionModel(checkEmptyList(filterByFornecedor(filter)));
 	}
 
 	public CompraDto getOne(Long id) {
@@ -82,6 +96,31 @@ public class CompraService {
 		}
 		
 		return compraSaved.get();
+	}
+	
+	private List<Compra> filterByFornecedor(FornecedorFilter filter) {
+
+		List<Fornecedor> allFornecedores = fornecedores.filter(filter);
+
+		List<Compra> allCompras = new ArrayList<>();
+		
+		for (Fornecedor fornecedor : allFornecedores) {
+			allCompras.addAll(compras.findByFornecedorId(fornecedor.getId()));
+		}
+		
+		allCompras.sort(Comparator.comparing(Compra::getId));
+		
+		return allCompras;
+	}
+	
+	
+	private List<Compra> checkEmptyList(List<Compra> list) {
+
+		if (list.isEmpty()) {
+			throw new CompraNotFoundException();
+		}
+		
+		return list;
 	}
 
 }
