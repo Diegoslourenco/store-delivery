@@ -1,5 +1,6 @@
 package com.gft.delivery.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +21,11 @@ import com.gft.delivery.dto.ClienteRequestDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.ClienteCpfNotUniqueException;
 import com.gft.delivery.exceptionhandler.ClienteEmailNotUniqueException;
+import com.gft.delivery.exceptionhandler.ClienteNotFoundException;
 import com.gft.delivery.exceptionhandler.ClienteNotSameException;
 import com.gft.delivery.model.Cliente;
 import com.gft.delivery.repository.ClienteRepository;
+import com.gft.delivery.repository.filter.ClienteFilter;
 
 @Service
 public class ClienteService {
@@ -39,8 +42,26 @@ public class ClienteService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
-	public CollectionModel<ClienteDto> search() {
-		return clienteAssembler.toCollectionModel(clientes.findAll());
+	public CollectionModel<ClienteDto> search(ClienteFilter filter) {
+		return clienteAssembler.toCollectionModel(checkEmptyList(clientes.filter(filter)));
+	}
+	
+	public CollectionModel<ClienteDto> searchWithNameAsc(ClienteFilter filter) {
+		
+		List<Cliente> allClientes = clientes.filter(filter);
+		
+		allClientes.sort(Comparator.comparing(Cliente::getName));		
+		
+		return	clienteAssembler.toCollectionModel(checkEmptyList(allClientes));
+	}
+	
+	public CollectionModel<ClienteDto> searchWithNameDesc(ClienteFilter filter) {
+		
+		List<Cliente> allClientes = clientes.filter(filter);
+		
+		allClientes.sort(Comparator.comparing(Cliente::getName).reversed());		
+		
+		return	clienteAssembler.toCollectionModel(checkEmptyList(allClientes));
 	}
 
 	public ClienteDto getOne(Long id) {
@@ -125,6 +146,15 @@ public class ClienteService {
 		if (cliente.getEmail().equals(novoCliente.getEmail())) {
 			throw new ClienteEmailNotUniqueException();
 		}	
+	}
+	
+	private List<Cliente> checkEmptyList(List<Cliente> list) {
+
+		if (list.isEmpty()) {
+			throw new ClienteNotFoundException();
+		}
+		
+		return list;
 	}
 	
 }

@@ -9,5 +9,4 @@ import com.gft.delivery.model.Estoque;
 public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
 	
 	public Optional<Estoque> findByProdutoId(Long produtoId);
-
 }

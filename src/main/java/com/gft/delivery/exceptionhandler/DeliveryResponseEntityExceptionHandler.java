@@ -156,6 +156,17 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ ClienteNotFoundException.class })
+	public ResponseEntity<Object> handleClienteNotFoundException(ClienteNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("cliente.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({ FornecedorEmailNotUniqueException.class })
 	public ResponseEntity<Object> handleFornecedorEmailNotUniqueException(FornecedorEmailNotUniqueException ex, WebRequest request) {
 		
@@ -226,6 +237,28 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 	public ResponseEntity<Object> handleAuthException(AuthException ex, WebRequest request) {
 		
 		String message = messageSource.getMessage("auth.user-or-password-incorrect", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ CompraNotFoundException.class })
+	public ResponseEntity<Object> handleCompraNotFoundException(CompraNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("compra.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ VendaNotFoundException.class })
+	public ResponseEntity<Object> handleVendaNotFoundException(VendaNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("venda.not-found", null, LocaleContextHolder.getLocale());
 		String description = ex.toString();
 		
 		List<Error> errors = Arrays.asList(new Error(message, description));

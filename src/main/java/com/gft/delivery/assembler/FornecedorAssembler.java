@@ -26,7 +26,7 @@ public class FornecedorAssembler extends RepresentationModelAssemblerSupport<For
 		resource.setId(fornecedor.getId());
 		resource.setCnpj(fornecedor.getCnpj());
 		resource.setName(fornecedor.getName());
-		resource.setPhone(fornecedor.getEmail());
+		resource.setPhone(fornecedor.getPhone());
 		resource.setEmail(fornecedor.getEmail());
 		resource.setAddress(fornecedor.getAddress());
 
@@ -42,7 +42,7 @@ public class FornecedorAssembler extends RepresentationModelAssemblerSupport<For
 	
 		CollectionModel<FornecedorDto> resources = super.toCollectionModel(allFornecedores);
 		
-		resources.add(linkTo(methodOn(FornecedorController.class).search()).withSelfRel());
+		resources.add(linkTo(methodOn(FornecedorController.class).search(null)).withSelfRel());
 		
 		return resources;
 	}

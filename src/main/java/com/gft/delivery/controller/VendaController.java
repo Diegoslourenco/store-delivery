@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.delivery.dto.VendaDto;
 import com.gft.delivery.dto.VendaRequestDto;
+import com.gft.delivery.repository.filter.ClienteFilter;
 import com.gft.delivery.service.VendaService;
 
 @RestController
-@RequestMapping("/vendas")
+@RequestMapping("/api/vendas")
 public class VendaController {
 	
 	@Autowired
@@ -29,8 +30,21 @@ public class VendaController {
 	
 	@PreAuthorize("hasRole('LOJA')")
 	@GetMapping
-	public ResponseEntity<CollectionModel<VendaDto>> search() {	
-		return new ResponseEntity<CollectionModel<VendaDto>>(vendaService.search(), HttpStatus.OK);	
+	public ResponseEntity<CollectionModel<VendaDto>> search(ClienteFilter filter) {	
+		return new ResponseEntity<CollectionModel<VendaDto>>(vendaService.search(filter), HttpStatus.OK);	
+	}
+	
+	@PreAuthorize("hasRole('LOJA')")
+	@GetMapping("/concluido")
+	public ResponseEntity<CollectionModel<VendaDto>> searchFinished(ClienteFilter filter) {	
+		return new ResponseEntity<CollectionModel<VendaDto>>(vendaService.searchFinished(filter), HttpStatus.OK);	
+	}
+	
+	
+	@PreAuthorize("hasRole('LOJA')")
+	@GetMapping("/pendente")
+	public ResponseEntity<CollectionModel<VendaDto>> searchPending(ClienteFilter filter) {	
+		return new ResponseEntity<CollectionModel<VendaDto>>(vendaService.searchPending(filter), HttpStatus.OK);	
 	}
 	
 	@PreAuthorize("hasRole('LOJA')")

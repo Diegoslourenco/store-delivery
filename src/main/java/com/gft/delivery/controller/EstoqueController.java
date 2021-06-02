@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.delivery.dto.EstoqueDto;
 import com.gft.delivery.dto.ProdutoPriceDto;
+import com.gft.delivery.repository.filter.ProdutoFilter;
 import com.gft.delivery.service.EstoqueService;
 
 @RestController
-@RequestMapping("/estoques")
+@RequestMapping("/api/estoques")
 @PreAuthorize("hasRole('LOJA')")
 public class EstoqueController {
 
@@ -27,8 +28,28 @@ public class EstoqueController {
 	private EstoqueService estoqueService;
 	
 	@GetMapping
-	public ResponseEntity<CollectionModel<EstoqueDto>> search() {	
-		return new ResponseEntity<CollectionModel<EstoqueDto>>(estoqueService.search(), HttpStatus.OK);	
+	public ResponseEntity<CollectionModel<EstoqueDto>> search(ProdutoFilter filter) {	
+		return new ResponseEntity<CollectionModel<EstoqueDto>>(estoqueService.search(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/quantidade/asc")
+	public ResponseEntity<CollectionModel<EstoqueDto>> searchWithQuantityAsc(ProdutoFilter filter) {	
+		return new ResponseEntity<CollectionModel<EstoqueDto>>(estoqueService.searchWithQuantityAsc(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/quantidade/desc")
+	public ResponseEntity<CollectionModel<EstoqueDto>> searchWithQuantityDesc(ProdutoFilter filter) {	
+		return new ResponseEntity<CollectionModel<EstoqueDto>>(estoqueService.searchWithQuantityDesc(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/preco/asc")
+	public ResponseEntity<CollectionModel<EstoqueDto>> searchWithPriceAsc(ProdutoFilter filter) {	
+		return new ResponseEntity<CollectionModel<EstoqueDto>>(estoqueService.searchWithPriceAsc(filter), HttpStatus.OK);	
+	}
+	
+	@GetMapping("/preco/desc")
+	public ResponseEntity<CollectionModel<EstoqueDto>> searchWithPriceDesc(ProdutoFilter filter) {	
+		return new ResponseEntity<CollectionModel<EstoqueDto>>(estoqueService.searchWithPriceDesc(filter), HttpStatus.OK);	
 	}
 	
 	@GetMapping("/{id}")

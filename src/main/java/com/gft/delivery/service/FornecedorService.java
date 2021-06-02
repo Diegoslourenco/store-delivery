@@ -1,5 +1,6 @@
 package com.gft.delivery.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,15 +19,17 @@ import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.FornecedorCnpjNotUniqueException;
 import com.gft.delivery.exceptionhandler.FornecedorEmailNotUniqueException;
 import com.gft.delivery.exceptionhandler.FornecedorNameNotUniqueException;
+import com.gft.delivery.exceptionhandler.FornecedorNotFoundException;
 import com.gft.delivery.exceptionhandler.FornecedorPhoneNotUniqueException;
 import com.gft.delivery.model.Fornecedor;
 import com.gft.delivery.repository.FornecedorRepository;
+import com.gft.delivery.repository.filter.FornecedorFilter;
 
 @Service
 public class FornecedorService {
 	
 	@Autowired
-	FornecedorAssembler fornecedorAssembler;
+	private FornecedorAssembler fornecedorAssembler;
 	
 	@Autowired
 	private FornecedorRepository fornecedores;
@@ -34,8 +37,26 @@ public class FornecedorService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
-	public CollectionModel<FornecedorDto> search() {
-		return fornecedorAssembler.toCollectionModel(fornecedores.findAll());
+	public CollectionModel<FornecedorDto> search(FornecedorFilter filter) {
+		return	fornecedorAssembler.toCollectionModel(checkEmptyList(fornecedores.filter(filter)));
+	}
+	
+	public CollectionModel<FornecedorDto> searchWithNameAsc(FornecedorFilter filter) {
+		
+		List<Fornecedor> allFornecedores = fornecedores.filter(filter);
+		
+		allFornecedores.sort(Comparator.comparing(Fornecedor::getName));		
+		
+		return	fornecedorAssembler.toCollectionModel(checkEmptyList(allFornecedores));
+	}
+	
+	public CollectionModel<FornecedorDto> searchWithNameDesc(FornecedorFilter filter) {
+		
+		List<Fornecedor> allFornecedores = fornecedores.filter(filter);
+		
+		allFornecedores.sort(Comparator.comparing(Fornecedor::getName).reversed());		
+		
+		return	fornecedorAssembler.toCollectionModel(checkEmptyList(allFornecedores));
 	}
 
 	public FornecedorDto getOne(Long id) {
@@ -73,6 +94,7 @@ public class FornecedorService {
 	}
 
 	private Fornecedor getById(Long id) {
+		
 		Optional<Fornecedor> fornecedorSaved = fornecedores.findById(id);
 		
 		if (fornecedorSaved.isEmpty()) {
@@ -120,6 +142,15 @@ public class FornecedorService {
 		if (fornecedor.getEmail().equals(novoFornecedor.getEmail())) {
 			throw new FornecedorEmailNotUniqueException();
 		}	
+	}
+	
+	private List<Fornecedor> checkEmptyList(List<Fornecedor> list) {
+
+		if (list.isEmpty()) {
+			throw new FornecedorNotFoundException();
+		}
+		
+		return list;
 	}
 	
 }

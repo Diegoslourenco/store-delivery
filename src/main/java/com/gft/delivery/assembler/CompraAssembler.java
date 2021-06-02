@@ -39,7 +39,7 @@ public class CompraAssembler extends RepresentationModelAssemblerSupport<Compra,
 
 		CollectionModel<CompraDto> resources = super.toCollectionModel(allCompras);
 		
-		resources.add(linkTo(methodOn(CompraController.class).search()).withSelfRel());
+		resources.add(linkTo(methodOn(CompraController.class).search(null)).withSelfRel());
 		
 		return resources;
 	}

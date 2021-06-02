@@ -1,6 +1,9 @@
 package com.gft.delivery.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,21 +14,64 @@ import org.springframework.stereotype.Service;
 import com.gft.delivery.assembler.EstoqueAssembler;
 import com.gft.delivery.dto.EstoqueDto;
 import com.gft.delivery.dto.ProdutoPriceDto;
+import com.gft.delivery.exceptionhandler.EstoqueNotFoundException;
 import com.gft.delivery.model.Estoque;
 import com.gft.delivery.model.ItemCompra;
+import com.gft.delivery.model.Produto;
 import com.gft.delivery.repository.EstoqueRepository;
+import com.gft.delivery.repository.ProdutoRepository;
+import com.gft.delivery.repository.filter.ProdutoFilter;
 
 @Service
 public class EstoqueService {
 	
 	@Autowired
-	EstoqueAssembler estoqueAssembler;
+	private EstoqueAssembler estoqueAssembler;
 	
 	@Autowired
 	private EstoqueRepository estoques;
 	
-	public CollectionModel<EstoqueDto> search() {
-		return estoqueAssembler.toCollectionModel(estoques.findAll());
+	@Autowired
+	private ProdutoRepository produtos;
+	
+	public CollectionModel<EstoqueDto> search(ProdutoFilter filter) {	
+		return estoqueAssembler.toCollectionModel(checkEmptyList(filterByProduct(filter)));
+	}
+
+	public CollectionModel<EstoqueDto> searchWithQuantityAsc(ProdutoFilter filter) {
+				
+		List<Estoque> allEstoques = filterByProduct(filter);
+		
+		allEstoques.sort(Comparator.comparing(Estoque::getQuantity));
+		
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
+	}
+	
+	public CollectionModel<EstoqueDto> searchWithQuantityDesc(ProdutoFilter filter) {
+		
+		List<Estoque> allEstoques = filterByProduct(filter);
+		
+		allEstoques.sort(Comparator.comparing(Estoque::getQuantity).reversed());
+		
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
+	}
+	
+	public CollectionModel<EstoqueDto> searchWithPriceAsc(ProdutoFilter filter) {
+		
+		List<Estoque> allEstoques = filterByProduct(filter);
+		
+		allEstoques.sort(Comparator.comparing(Estoque::getSellingPrice));
+		
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
+	}
+	
+	public CollectionModel<EstoqueDto> searchWithPriceDesc(ProdutoFilter filter) {
+		
+		List<Estoque> allEstoques = filterByProduct(filter);
+		
+		allEstoques.sort(Comparator.comparing(Estoque::getSellingPrice).reversed());
+		
+		return estoqueAssembler.toCollectionModel(checkEmptyList(allEstoques));
 	}
 
 	public EstoqueDto getOne(Long id) {
@@ -38,7 +84,7 @@ public class EstoqueService {
 		
 		estoque.setProduto(itemCompra.getProduto());
 		estoque.setQuantity(itemCompra.getQuantity());
-		estoque.setSellingPrice(new BigDecimal(0.00));
+		estoque.setSellingPrice(BigDecimal.ZERO);
 			
 		estoques.save(estoque);
 	}
@@ -81,6 +127,28 @@ public class EstoqueService {
 	
 	public Optional<Estoque> getByProdutoId(Long produtoId) {
 		return estoques.findByProdutoId(produtoId);
+	}
+	
+	private List<Estoque> filterByProduct(ProdutoFilter filter) {
+		
+		List<Produto> allProdutos = produtos.filter(filter);
+
+		List<Estoque> allEstoques = new ArrayList<>();
+		
+		for (Produto produto : allProdutos) {
+			allEstoques.add(estoques.findByProdutoId(produto.getId()).get());
+		}
+		
+		return allEstoques;
+	}
+	
+	private List<Estoque> checkEmptyList(List<Estoque> list) {
+
+		if (list.isEmpty()) {
+			throw new EstoqueNotFoundException();
+		}
+		
+		return list;
 	}
 
 }
