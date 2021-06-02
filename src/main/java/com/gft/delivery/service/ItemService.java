@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gft.delivery.exceptionhandler.ItemPriceNotNegativeOrZeroException;
+import com.gft.delivery.exceptionhandler.ItemQuantityNotNegativeOrZeroException;
 import com.gft.delivery.model.Compra;
 import com.gft.delivery.model.ItemCompra;
 import com.gft.delivery.model.ItemVenda;
@@ -37,6 +39,8 @@ public class ItemService {
 		
 		for (ItemCompra itemCompra : itens) {
 			
+			checkValidItemCompra(itemCompra);
+			
 			itemCompra.setCompra(compra);
 			this.saveCompra(itemCompra);
 			
@@ -49,10 +53,12 @@ public class ItemService {
 			}	
 		}	
 	}
-	
+
 	public List<ItemVenda> saveItemVendaList(List<ItemVenda> itens, Venda venda) {
 		
 		for (ItemVenda itemVenda : itens) {
+			
+			checkValidItemVenda(itemVenda);
 			
 			BigDecimal price = estoqueService.getByProdutoId(itemVenda.getProduto().getId()).get().getSellingPrice();
 			
@@ -64,6 +70,23 @@ public class ItemService {
 		}
 		
 		return itens;	
+	}
+	
+	private void checkValidItemVenda(ItemVenda itemVenda) {
+		if (itemVenda.getQuantity() < 1) {
+			throw new ItemQuantityNotNegativeOrZeroException();
+		}		
+	}
+
+	private void checkValidItemCompra(ItemCompra itemCompra) {
+		
+		if (itemCompra.getQuantity() < 1) {
+			throw new ItemQuantityNotNegativeOrZeroException();
+		}
+		
+		if (itemCompra.getPrice().compareTo(BigDecimal.ZERO) != 1) {
+			throw new ItemPriceNotNegativeOrZeroException();
+		}
 	}
 
 }

@@ -131,19 +131,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "ma",
+									"value": "maca",
 									"description": "Nome do Produto",
 									"disabled": true
 								},
 								{
 									"key": "description",
-									"value": "o",
+									"value": "sem",
 									"description": "Descrição do Produto",
 									"disabled": true
 								},
 								{
 									"key": "unit",
-									"value": "pacote",
+									"value": "lata",
 									"description": "Unidade do Produto",
 									"disabled": true
 								}
@@ -172,19 +172,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "ma",
+									"value": "maca",
 									"description": "Nome do Produto",
 									"disabled": true
 								},
 								{
 									"key": "description",
-									"value": "o",
+									"value": "sem",
 									"description": "Descrição do Produto",
 									"disabled": true
 								},
 								{
 									"key": "unit",
-									"value": null,
+									"value": "lata",
 									"description": "Unidade do Produto",
 									"disabled": true
 								}
@@ -340,7 +340,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "re",
+									"value": "refrigerante",
 									"description": "Nome do Produto",
 									"disabled": true
 								},
@@ -382,19 +382,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "ref",
+									"value": "refrigerante",
 									"description": "Nome do Produto",
 									"disabled": true
 								},
 								{
 									"key": "description",
-									"value": null,
+									"value": "maca",
 									"description": "Descrição do Produto",
 									"disabled": true
 								},
 								{
 									"key": "unit",
-									"value": null,
+									"value": "kg",
 									"description": "Unidade do Produto",
 									"disabled": true
 								}
@@ -409,7 +409,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/estoques/quantidade/desc?name=ref",
+							"raw": "http://localhost:8080/api/estoques/quantidade/desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -424,18 +424,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "ref",
-									"description": "Nome do Produto"
+									"value": "refrigerante",
+									"description": "Nome do Produto",
+									"disabled": true
 								},
 								{
 									"key": "description",
-									"value": null,
+									"value": "sem",
 									"description": "Descrição do Produto",
 									"disabled": true
 								},
 								{
 									"key": "unit",
-									"value": null,
+									"value": "lata",
 									"description": "Unidade do Produto",
 									"disabled": true
 								}
@@ -465,19 +466,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": null,
+									"value": "maca",
 									"description": "Nome do Produto",
 									"disabled": true
 								},
 								{
 									"key": "description",
-									"value": null,
+									"value": "sem",
 									"description": "Descrição do Produto",
 									"disabled": true
 								},
 								{
 									"key": "unit",
-									"value": null,
+									"value": "lata",
 									"description": "Unidade do Produto",
 									"disabled": true
 								}
@@ -507,19 +508,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "ref",
+									"value": "refrigerante",
 									"description": "Nome do Produto",
 									"disabled": true
 								},
 								{
 									"key": "description",
-									"value": null,
+									"value": "maca",
 									"description": "Descrição do Produto",
 									"disabled": true
 								},
 								{
 									"key": "unit",
-									"value": null,
+									"value": "lata",
 									"description": "Unidade do Produto",
 									"disabled": true
 								}

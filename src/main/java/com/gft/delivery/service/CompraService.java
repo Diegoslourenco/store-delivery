@@ -19,6 +19,7 @@ import com.gft.delivery.dto.CompraRequestDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.CompraNotFoundException;
 import com.gft.delivery.exceptionhandler.FornecedorNotFoundException;
+import com.gft.delivery.exceptionhandler.ItemListNotEmptyException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.model.Compra;
 import com.gft.delivery.model.Fornecedor;
@@ -88,7 +89,20 @@ public class CompraService {
 			throw new FornecedorNotFoundException();	
 		}
 		
-		for (ItemCompra itemCompra : compraRequest.getItens()) {			
+		if (compraRequest.getItens().isEmpty()) {
+			throw new ItemListNotEmptyException();
+		}
+		
+		for (ItemCompra itemCompra : compraRequest.getItens()) {
+			
+			if (itemCompra.getProduto() == null) {
+				throw new ProdutoNotFoundException();
+			}
+			
+			if (!produtoService.produtoExists(itemCompra.getProduto().getId())) {
+				throw new ProdutoNotFoundException();			
+			}
+			
 			if (!produtoService.produtoExists(itemCompra.getProduto().getId())) {
 				throw new ProdutoNotFoundException();			
 			}

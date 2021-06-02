@@ -57,65 +57,10 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		
 	}
 	
-	@ExceptionHandler({ EmptyResultDataAccessException.class })
-	public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
+	@ExceptionHandler({ AuthException.class })
+	public ResponseEntity<Object> handleAuthException(AuthException ex, WebRequest request) {
 		
-		String message = messageSource.getMessage("resource.not-found", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-	}
-	
-	@ExceptionHandler({ DataIntegrityViolationException.class })
-	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("resource.not-permitted-operation", null, LocaleContextHolder.getLocale());
-		String description = ExceptionUtils.getRootCauseMessage(ex);
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ ProdutoNameNotUniqueException.class })
-	public ResponseEntity<Object> handleProdutoNameNotUniqueException(ProdutoNameNotUniqueException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("produto.name-not-unique", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ FornecedorCnpjNotUniqueException.class })
-	public ResponseEntity<Object> handleFornecedorCnpjNotUniqueException(FornecedorCnpjNotUniqueException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("fornecedor.cnpj-not-unique", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ FornecedorNameNotUniqueException.class })
-	public ResponseEntity<Object> handleFornecedorNameNotUniqueException(FornecedorNameNotUniqueException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("fornecedor.name-not-unique", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ FornecedorPhoneNotUniqueException.class })
-	public ResponseEntity<Object> handleFornecedorPhoneNotUniqueException(FornecedorPhoneNotUniqueException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("fornecedor.phone-not-unique", null, LocaleContextHolder.getLocale());
+		String message = messageSource.getMessage("auth.user-or-password-incorrect", null, LocaleContextHolder.getLocale());
 		String description = ex.toString();
 		
 		List<Error> errors = Arrays.asList(new Error(message, description));
@@ -167,6 +112,94 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ CompraNotFoundException.class })
+	public ResponseEntity<Object> handleCompraNotFoundException(CompraNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("compra.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ DataIntegrityViolationException.class })
+	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("resource.not-permitted-operation", null, LocaleContextHolder.getLocale());
+		String description = ExceptionUtils.getRootCauseMessage(ex);
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ EstoqueNotEnoughException.class })
+	public ResponseEntity<Object> handleEstoqueNotEnoughException(EstoqueNotEnoughException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("estoque.not-enough", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ EstoqueNotFoundException.class })
+	public ResponseEntity<Object> handleEstoqueNotFoundException(EstoqueNotFoundException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("estoque.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ EmptyResultDataAccessException.class })
+	public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("resource.not-found", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ FornecedorCnpjNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorCnpjNotUniqueException(FornecedorCnpjNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.cnpj-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ FornecedorNameNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorNameNotUniqueException(FornecedorNameNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.name-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ FornecedorPhoneNotUniqueException.class })
+	public ResponseEntity<Object> handleFornecedorPhoneNotUniqueException(FornecedorPhoneNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("fornecedor.phone-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({ FornecedorEmailNotUniqueException.class })
 	public ResponseEntity<Object> handleFornecedorEmailNotUniqueException(FornecedorEmailNotUniqueException ex, WebRequest request) {
 		
@@ -189,6 +222,50 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ ItemListNotEmptyException.class })
+	public ResponseEntity<Object> handleItemListNotEmptyException(ItemListNotEmptyException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("item.empty-list", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ItemQuantityNotNegativeOrZeroException.class })
+	public ResponseEntity<Object> handleItemQuantityNotNegativeOrZeroException(ItemQuantityNotNegativeOrZeroException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("item.quantity-not-negative-or-zero", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ItemPriceNotNegativeOrZeroException.class })
+	public ResponseEntity<Object> handleItemPriceNotNegativeOrZeroException(ItemPriceNotNegativeOrZeroException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("item.price-not-negative-or-zero", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ProdutoNameNotUniqueException.class })
+	public ResponseEntity<Object> handleProdutoNameNotUniqueException(ProdutoNameNotUniqueException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("produto.name-not-unique", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({ ProdutoNotFoundException.class })
 	public ResponseEntity<Object> handleProdutoNotFoundException(ProdutoNotFoundException ex, WebRequest request) {
 		
@@ -200,54 +277,10 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
-	@ExceptionHandler({ EstoqueNotFoundException.class })
-	public ResponseEntity<Object> handleEstoqueNotFoundException(EstoqueNotFoundException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("estoque.not-found", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ EstoqueNotEnoughException.class })
-	public ResponseEntity<Object> handleEstoqueNotEnoughException(EstoqueNotEnoughException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("estoque.not-enough", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
 	@ExceptionHandler({ VendaAlreadyReceivedException.class })
 	public ResponseEntity<Object> handleVendaAlreadyReceivedException(VendaAlreadyReceivedException ex, WebRequest request) {
 		
 		String message = messageSource.getMessage("venda.already-received", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ AuthException.class })
-	public ResponseEntity<Object> handleAuthException(AuthException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("auth.user-or-password-incorrect", null, LocaleContextHolder.getLocale());
-		String description = ex.toString();
-		
-		List<Error> errors = Arrays.asList(new Error(message, description));
-		
-		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ CompraNotFoundException.class })
-	public ResponseEntity<Object> handleCompraNotFoundException(CompraNotFoundException ex, WebRequest request) {
-		
-		String message = messageSource.getMessage("compra.not-found", null, LocaleContextHolder.getLocale());
 		String description = ex.toString();
 		
 		List<Error> errors = Arrays.asList(new Error(message, description));

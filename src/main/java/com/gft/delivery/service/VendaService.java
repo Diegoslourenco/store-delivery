@@ -27,6 +27,7 @@ import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.ClienteNotSameException;
 import com.gft.delivery.exceptionhandler.EstoqueNotEnoughException;
 import com.gft.delivery.exceptionhandler.EstoqueNotFoundException;
+import com.gft.delivery.exceptionhandler.ItemListNotEmptyException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.exceptionhandler.VendaAlreadyReceivedException;
 import com.gft.delivery.exceptionhandler.VendaNotFoundException;
@@ -102,20 +103,52 @@ public class VendaService {
 	
 	public VendaDto save(VendaRequestDto vendaRequest, HttpServletResponse response) throws MessagingException {
 		
-		checkItens(vendaRequest.getItens());
+		checkValidVenda(vendaRequest);
 		
-		Venda vendaSaved = vendas.save(new Venda(vendaRequest.getCliente(), VendaStatus.PENDENTE));
+		//Get cliente by user details
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Cliente cliente = usuarios.findByEmail(user.getUsername()).get().getCliente();
+		
+		Venda vendaSaved = vendas.save(new Venda(cliente, VendaStatus.PENDENTE));
 				
 		// Updating quantity and saving ItemCompra list
 		List<ItemVenda> itens = itemService.saveItemVendaList(vendaRequest.getItens(), vendaSaved);
 		
-		// Get user details and send receipt by email
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+		// Send receipt by email
 		sendEmail(user.getUsername(), itens) ;
 		
 		publisher.publishEvent(new ResourceCreatedEvent(this, response, vendaSaved.getId()));
 		
 		return vendaAssembler.toModel(vendaSaved);
+	}
+
+	private void checkValidVenda(VendaRequestDto vendaRequest) {
+		
+		if (vendaRequest.getItens().isEmpty()) {
+			throw new ItemListNotEmptyException();
+		}
+
+		for (ItemVenda itemVenda : vendaRequest.getItens()) {
+			
+			if (itemVenda.getProduto() == null) {
+				throw new ProdutoNotFoundException();
+			}
+			
+			Long itemId = itemVenda.getProduto().getId();
+			
+			if (!produtoService.produtoExists(itemId)) {
+				throw new ProdutoNotFoundException();			
+			}
+			
+			if (!estoqueService.estoqueExists(itemId)) {
+				throw new EstoqueNotFoundException();				
+			}
+			
+			if ((estoqueService.getById(itemId).getQuantity() - itemVenda.getQuantity()) < 0) {
+				throw new EstoqueNotEnoughException();
+			}
+		}
+		
 	}
 
 	public VendaDto update(Long id) {
@@ -150,26 +183,6 @@ public class VendaService {
 		}
 		
 		return list;
-	}
-	
-	private void checkItens(List<ItemVenda> itens) {
-		for (ItemVenda itemVenda : itens) {
-			
-			Long itemId = itemVenda.getProduto().getId();
-			
-			if (!produtoService.produtoExists(itemId)) {
-				throw new ProdutoNotFoundException();			
-			}
-			
-			if (!estoqueService.estoqueExists(itemId)) {
-				throw new EstoqueNotFoundException();				
-			}
-			
-			if ((estoqueService.getById(itemId).getQuantity() - itemVenda.getQuantity()) < 0) {
-				throw new EstoqueNotEnoughException();
-			}
-		}
-		
 	}
 
 	private Venda getById(Long id) {
