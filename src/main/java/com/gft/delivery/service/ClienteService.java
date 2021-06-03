@@ -18,11 +18,13 @@ import org.springframework.stereotype.Service;
 import com.gft.delivery.assembler.ClienteAssembler;
 import com.gft.delivery.dto.ClienteDto;
 import com.gft.delivery.dto.ClienteRequestDto;
+import com.gft.delivery.dto.PasswordDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.ClienteCpfNotUniqueException;
 import com.gft.delivery.exceptionhandler.ClienteEmailNotUniqueException;
 import com.gft.delivery.exceptionhandler.ClienteNotFoundException;
 import com.gft.delivery.exceptionhandler.ClienteNotSameException;
+import com.gft.delivery.exceptionhandler.PasswordNotSameException;
 import com.gft.delivery.model.Cliente;
 import com.gft.delivery.repository.ClienteRepository;
 import com.gft.delivery.repository.filter.ClienteFilter;
@@ -86,20 +88,45 @@ public class ClienteService {
 
 	public ClienteDto update(Long id, Cliente cliente) {
 		
-		Cliente clienteSaved = getById(id);
-		
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String userEmail = user.getUsername();
 		
-		if (!clienteSaved.getEmail().equals(userEmail)) {
-			throw new ClienteNotSameException();
-		}
+		checkSameClient(id, user);
+		
+		Cliente clienteSaved = getById(id);
 		
 		checkUniqueCliente(id, cliente);
 		
 		BeanUtils.copyProperties(cliente, clienteSaved, "id");
 		
+		usuarioService.update(clienteSaved);
+		
 		return clienteAssembler.toModel(clientes.save(clienteSaved));
+	}
+	
+	private void checkSameClient(Long id, UserDetails user) {
+		
+		Cliente clienteSaved = getById(id);
+		
+		String userEmail = user.getUsername();
+		
+		if (!clienteSaved.getEmail().equals(userEmail)) {
+			throw new ClienteNotSameException();
+		}
+	}
+
+	public void updatePassword(Long id, PasswordDto passwordDto) {
+		
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		checkSameClient(id, user);	
+		
+		if (!passwordDto.getPassword().equals(passwordDto.getConfirmation())) {
+			throw new PasswordNotSameException();
+		}
+		
+		String userEmail = user.getUsername();
+
+		usuarioService.updatePassword(passwordDto, userEmail);
 	}
 
 	public void delete(Long id) {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.gft.delivery.dto.PasswordDto;
 import com.gft.delivery.model.Cliente;
 import com.gft.delivery.model.Usuario;
 import com.gft.delivery.repository.PerfilRepository;
@@ -30,6 +31,24 @@ public class UsuarioService {
 		);
 		
 		usuarios.save(novoUsuario);	
+	}
+	
+	public void update(Cliente cliente) {
+		
+		Usuario usuarioSaved = usuarios.findByClienteId(cliente.getId()).get();
+		
+		usuarioSaved.setEmail(cliente.getEmail());
+		
+		usuarios.save(usuarioSaved);	
+	}
+	
+	public void updatePassword(PasswordDto passwordDto, String userEmail) {
+		
+		Usuario usuarioSaved = usuarios.findByEmail(userEmail).get();
+		
+		usuarioSaved.setPassword(new BCryptPasswordEncoder().encode(passwordDto.getPassword()));
+		
+		usuarios.save(usuarioSaved);	
 	}
 
 }

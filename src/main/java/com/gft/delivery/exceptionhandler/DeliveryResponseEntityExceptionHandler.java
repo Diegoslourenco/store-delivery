@@ -255,6 +255,17 @@ public class DeliveryResponseEntityExceptionHandler extends ResponseEntityExcept
 		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
+	@ExceptionHandler({ PasswordNotSameException.class })
+	public ResponseEntity<Object> handlePasswordNotSameException(PasswordNotSameException ex, WebRequest request) {
+		
+		String message = messageSource.getMessage("cliente.password-not-same", null, LocaleContextHolder.getLocale());
+		String description = ex.toString();
+		
+		List<Error> errors = Arrays.asList(new Error(message, description));
+		
+		return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler({ ProdutoNameNotUniqueException.class })
 	public ResponseEntity<Object> handleProdutoNameNotUniqueException(ProdutoNameNotUniqueException ex, WebRequest request) {
 		

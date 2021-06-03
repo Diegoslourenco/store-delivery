@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.delivery.dto.ClienteDto;
 import com.gft.delivery.dto.ClienteRequestDto;
+import com.gft.delivery.dto.PasswordDto;
 import com.gft.delivery.model.Cliente;
 import com.gft.delivery.repository.filter.ClienteFilter;
 import com.gft.delivery.service.ClienteService;
@@ -65,11 +66,18 @@ public class ClienteController {
 		return new ResponseEntity<ClienteDto>(clienteService.update(id, cliente), HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('CLIENTE')")
+	@PutMapping("/{id}/senha")
+	public ResponseEntity<?> updatePassword(@PathVariable Long id, @Valid @RequestBody PasswordDto passwordDto) {	
+		clienteService.updatePassword(id, passwordDto);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@PreAuthorize("hasRole('LOJA')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		clienteService.delete(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(id, HttpStatus.NO_CONTENT);
 	}
 	
 }
