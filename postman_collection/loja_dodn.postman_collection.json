@@ -1097,7 +1097,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Update cliente",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -1127,7 +1127,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Delete cliente",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1238,7 +1238,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fornecedor\": {\r\n        \"id\": \"1\"\r\n    },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 8\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        },\r\n        {\r\n            \"produto\": {\r\n                \"id\": 2\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"fornecedor\": {\r\n        \"id\": \"5\"\r\n    },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 1\r\n            },\r\n            \"quantity\": \"10\",\r\n            \"price\": 1.50\r\n        },\r\n        {\r\n            \"produto\": {\r\n                \"id\": 2\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1469,7 +1469,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cliente\": {\r\n        \"id\": 2\r\n        },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 1\r\n            },\r\n            \"quantity\": 1\r\n        },\r\n                {\r\n            \"produto\": {\r\n                \"id\": 3\r\n            },\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 1\r\n            },\r\n            \"quantity\": 3\r\n        },\r\n                {\r\n            \"produto\": {\r\n                \"id\": 2\r\n            },\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1521,7 +1521,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWVnby5sb3VyZW5jb0BnZnQuY29tIiwiaWF0IjoxNjIyNjU2NTc0LCJleHAiOjE2MjI3NDI5NzR9.77T2njrSLHPc4IgxC6h7ibfToOLuXpqYRBn2L55xWgE",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWVnby5sb3VyZW5jb0BnZnQuY29tIiwiaWF0IjoxNjIyNjc2OTQyLCJleHAiOjE2MjI3NjMzNDJ9._jEHxd9XPN4ERlauP91pMs3nTPy1d4tNE6fIvX1-nug",
 				"type": "string"
 			}
 		]
