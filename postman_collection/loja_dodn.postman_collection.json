@@ -1111,7 +1111,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/clientes/2",
+							"raw": "http://localhost:8080/api/clientes/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1120,7 +1120,38 @@
 							"path": [
 								"api",
 								"clientes",
-								"2"
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update cliente senha",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"novasenha\",\r\n    \"confirmation\": \"novasenha\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/clientes/3/senha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clientes",
+								"3",
+								"senha"
 							]
 						}
 					},
@@ -1521,7 +1552,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWVnby5sb3VyZW5jb0BnZnQuY29tIiwiaWF0IjoxNjIyNjc2OTQyLCJleHAiOjE2MjI3NjMzNDJ9._jEHxd9XPN4ERlauP91pMs3nTPy1d4tNE6fIvX1-nug",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWVnby5sb3VyZW5jb0BnZnQuY29tIiwiaWF0IjoxNjIyNzUyMDQ2LCJleHAiOjE2MjI4Mzg0NDZ9.727McibhvxFuvlHaOZu13A4coYxFpmoiWOhsIZzE-AI",
 				"type": "string"
 			}
 		]
