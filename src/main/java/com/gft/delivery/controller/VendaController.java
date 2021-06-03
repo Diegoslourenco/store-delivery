@@ -1,5 +1,6 @@
 package com.gft.delivery.controller;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -55,7 +56,8 @@ public class VendaController {
 
 	@PreAuthorize("hasRole('CLIENTE')")
 	@PostMapping
-	public ResponseEntity<VendaDto> create(@Valid @RequestBody VendaRequestDto vendaRequest, HttpServletResponse response) {
+	public ResponseEntity<VendaDto> create(@Valid @RequestBody VendaRequestDto vendaRequest, HttpServletResponse response) 
+			throws MessagingException {
 		return new ResponseEntity<VendaDto>(vendaService.save(vendaRequest, response), HttpStatus.CREATED);
 	}
 	

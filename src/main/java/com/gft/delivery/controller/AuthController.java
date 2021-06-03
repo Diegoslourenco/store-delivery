@@ -36,8 +36,8 @@ public class AuthController {
 			String token = tokenService.generateToken(authentication);
 			
 			return ResponseEntity.ok(new TokenDto(token, loginRequest.getEmail()));
-		
-		} catch (AuthenticationException e) {
+		}
+		catch (AuthenticationException e) {
 			
 			throw new AuthException();
 		}

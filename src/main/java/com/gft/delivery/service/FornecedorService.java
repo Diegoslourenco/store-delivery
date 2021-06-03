@@ -92,17 +92,6 @@ public class FornecedorService {
 	public boolean fornecedorExists(Long id) {
 		return fornecedores.existsById(id);	
 	}
-
-	private Fornecedor getById(Long id) {
-		
-		Optional<Fornecedor> fornecedorSaved = fornecedores.findById(id);
-		
-		if (fornecedorSaved.isEmpty()) {
-			throw new EmptyResultDataAccessException(1);
-		}
-		
-		return fornecedorSaved.get();
-	}
 	
 	private void checkUniqueFornecedor(Fornecedor novoFornecedor) {
 	
@@ -151,6 +140,17 @@ public class FornecedorService {
 		}
 		
 		return list;
+	}
+	
+	private Fornecedor getById(Long id) {
+		
+		Optional<Fornecedor> fornecedorSaved = fornecedores.findById(id);
+		
+		if (fornecedorSaved.isEmpty()) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		
+		return fornecedorSaved.get();
 	}
 	
 }

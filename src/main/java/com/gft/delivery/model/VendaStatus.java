@@ -5,7 +5,6 @@ package com.gft.delivery.model;
  * @author    Diego da Silva Lourenco
  */
 
-
 public enum VendaStatus {
 	
 	PENDENTE("pendente"),

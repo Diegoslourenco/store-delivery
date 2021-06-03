@@ -19,6 +19,7 @@ import com.gft.delivery.dto.CompraRequestDto;
 import com.gft.delivery.event.ResourceCreatedEvent;
 import com.gft.delivery.exceptionhandler.CompraNotFoundException;
 import com.gft.delivery.exceptionhandler.FornecedorNotFoundException;
+import com.gft.delivery.exceptionhandler.ItemListNotEmptyException;
 import com.gft.delivery.exceptionhandler.ProdutoNotFoundException;
 import com.gft.delivery.model.Compra;
 import com.gft.delivery.model.Fornecedor;
@@ -54,10 +55,6 @@ public class CompraService {
 	public CollectionModel<CompraDto> search(FornecedorFilter filter) {
 		return compraAssembler.toCollectionModel(checkEmptyList(filterByFornecedor(filter)));
 	}
-	
-	public CollectionModel<CompraDto> searchFinished(FornecedorFilter filter) {
-		return compraAssembler.toCollectionModel(checkEmptyList(filterByFornecedor(filter)));
-	}
 
 	public CompraDto getOne(Long id) {
 		return compraAssembler.toModel(getById(id));
@@ -65,27 +62,51 @@ public class CompraService {
 	
 	public CompraDto save(CompraRequestDto compraRequest, HttpServletResponse response) {
 		
-		if (!fornecedorService.fornecedorExists(compraRequest.getFornecedor().getId())) {
-			throw new FornecedorNotFoundException();	
-		}
-		
-		for (ItemCompra itemCompra : compraRequest.getItens()) {			
-			if (!produtoService.produtoExists(itemCompra.getProduto().getId())) {
-				throw new ProdutoNotFoundException();			
-			}
-		}
-		
-		Compra compra = new Compra();
-		compra.setFornecedor(compraRequest.getFornecedor());
+		checkValidCompra(compraRequest);
 	
-		Compra compraSaved = compras.save(compra);
+		Compra compraSaved = compras.save(new Compra(compraRequest.getFornecedor()));
 				
-		// Updating quantity and saving ItemCompra list
+		// Updating quantities and saving ItemCompra list
 		itemService.saveItemCompraList(compraRequest.getItens(), compraSaved);
 		
 		publisher.publishEvent(new ResourceCreatedEvent(this, response, compraSaved.getId()));
 		
 		return compraAssembler.toModel(compraSaved);
+	}
+	
+	private List<Compra> checkEmptyList(List<Compra> list) {
+
+		if (list.isEmpty()) {
+			throw new CompraNotFoundException();
+		}
+		
+		return list;
+	}
+
+	private void checkValidCompra(CompraRequestDto compraRequest) {
+		
+		if (!fornecedorService.fornecedorExists(compraRequest.getFornecedor().getId())) {
+			throw new FornecedorNotFoundException();	
+		}
+		
+		if (compraRequest.getItens().isEmpty()) {
+			throw new ItemListNotEmptyException();
+		}
+		
+		for (ItemCompra itemCompra : compraRequest.getItens()) {
+			
+			if (itemCompra.getProduto() == null) {
+				throw new ProdutoNotFoundException();
+			}
+			
+			if (!produtoService.produtoExists(itemCompra.getProduto().getId())) {
+				throw new ProdutoNotFoundException();			
+			}
+			
+			if (!produtoService.produtoExists(itemCompra.getProduto().getId())) {
+				throw new ProdutoNotFoundException();			
+			}
+		}
 	}
 
 	private Compra getById(Long id) {
@@ -113,14 +134,4 @@ public class CompraService {
 		return allCompras;
 	}
 	
-	
-	private List<Compra> checkEmptyList(List<Compra> list) {
-
-		if (list.isEmpty()) {
-			throw new CompraNotFoundException();
-		}
-		
-		return list;
-	}
-
 }

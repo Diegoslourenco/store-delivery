@@ -37,6 +37,12 @@ public class Compra implements Serializable {
 	
 	@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
 	private List<ItemCompra> itens;
+	
+	public Compra() {}
+	
+	public Compra(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
+	}
 
 	public Long getId() {
 		return id;

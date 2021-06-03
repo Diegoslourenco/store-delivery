@@ -38,6 +38,14 @@ public class Estoque implements Serializable {
 	
 	@Column(name = "selling_price")
 	private BigDecimal sellingPrice;
+	
+	public Estoque() {}
+	
+	public Estoque(Produto produto, int quantity, BigDecimal sellingPrice) {
+		this.produto = produto;
+		this.quantity = quantity;
+		this.sellingPrice = sellingPrice;
+	}
 
 	public Long getId() {
 		return id;

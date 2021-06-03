@@ -15,6 +15,11 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * ItemCompra --- represents an item in a sale list.
+ * @author    Diego da Silva Lourenco
+ */
+
 @Entity
 @Table(name = "itens_venda")
 @JsonIgnoreProperties({"venda"})

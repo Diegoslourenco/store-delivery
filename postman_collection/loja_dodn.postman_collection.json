@@ -23,13 +23,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth",
+							"raw": "http://localhost:8080/api/auth",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"auth"
 							]
 						}
@@ -51,13 +52,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth",
+							"raw": "http://localhost:8080/api/auth",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"auth"
 							]
 						}
@@ -75,14 +77,139 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/produtos",
+							"raw": "http://localhost:8080/api/produtos",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"produtos"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "maça",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "maça",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "kg",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All produtos order by name asc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/produtos/asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"produtos",
+								"asc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "maca",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "sem",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "lata",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All produtos order by name desc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/produtos/desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"produtos",
+								"desc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "maca",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "sem",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "lata",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One product by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/produtos/nome/maca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"produtos",
+								"nome",
+								"maca"
 							]
 						}
 					},
@@ -94,13 +221,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/produtos/1",
+							"raw": "http://localhost:8080/api/produtos/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"produtos",
 								"1"
 							]
@@ -123,13 +251,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/produtos",
+							"raw": "http://localhost:8080/api/produtos",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"produtos"
 							]
 						}
@@ -151,13 +280,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/produtos/4",
+							"raw": "http://localhost:8080/api/produtos/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"produtos",
 								"4"
 							]
@@ -171,15 +301,16 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/produtos/7",
+							"raw": "http://localhost:8080/api/produtos/8",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"produtos",
-								"7"
+								"8"
 							]
 						}
 					},
@@ -196,14 +327,203 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/estoques",
+							"raw": "http://localhost:8080/api/estoques",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"estoques"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "refrigerante",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "maca",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "kg",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All estoques order by quantidade asc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/estoques/quantidade/asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"estoques",
+								"quantidade",
+								"asc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "refrigerante",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "maca",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "kg",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All estoques order by quantidade desc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/estoques/quantidade/desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"estoques",
+								"quantidade",
+								"desc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "refrigerante",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "sem",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "lata",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All estoques order by preco asc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/estoques/preco/asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"estoques",
+								"preco",
+								"asc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "maca",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "sem",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "lata",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All estoques order by preco desc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/estoques/preco/desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"estoques",
+								"preco",
+								"desc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "refrigerante",
+									"description": "Nome do Produto",
+									"disabled": true
+								},
+								{
+									"key": "description",
+									"value": "maca",
+									"description": "Descrição do Produto",
+									"disabled": true
+								},
+								{
+									"key": "unit",
+									"value": "lata",
+									"description": "Unidade do Produto",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -215,13 +535,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/estoques/1",
+							"raw": "http://localhost:8080/api/estoques/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"estoques",
 								"1"
 							]
@@ -244,15 +565,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/estoques/1",
+							"raw": "http://localhost:8080/api/estoques/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"estoques",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -269,14 +591,172 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/fornecedores",
+							"raw": "http://localhost:8080/api/fornecedores",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"fornecedores"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "mercado",
+									"description": "Nome do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "marcio",
+									"description": "email do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "jardim",
+									"description": "Bairro do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "são paulo",
+									"description": "Cidade do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Fornecedor",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All fornecedores order by name asc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/fornecedores/nome/asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"fornecedores",
+								"nome",
+								"asc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "mercado",
+									"description": "Nome do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "marcio",
+									"description": "email do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "jardim",
+									"description": "Bairro do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "são paulo",
+									"description": "Cidade do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Fornecedor",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All fornecedores order by name desc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/fornecedores/nome/desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"fornecedores",
+								"nome",
+								"desc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "mercado",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "marcio",
+									"description": "Nome do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "jardim",
+									"description": "Bairro do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "são paulo",
+									"description": "Cidade do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Fornecedor",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -287,7 +767,19 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": null
+						"url": {
+							"raw": "http://localhost:8080/api/fornecedores/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"fornecedores",
+								"1"
+							]
+						}
 					},
 					"response": []
 				},
@@ -306,13 +798,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/fornecedores",
+							"raw": "http://localhost:8080/api/fornecedores",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"fornecedores"
 							]
 						}
@@ -334,13 +827,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/fornecedores/20",
+							"raw": "http://localhost:8080/api/fornecedores/20",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"fornecedores",
 								"20"
 							]
@@ -354,13 +848,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/fornecedores/7",
+							"raw": "http://localhost:8080/api/fornecedores/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"fornecedores",
 								"7"
 							]
@@ -379,14 +874,173 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/clientes",
+							"raw": "http://localhost:8080/api/clientes",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"clientes"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "diego",
+									"description": "Nome do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "diego",
+									"description": "email do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "bairro",
+									"description": "Bairro do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Cliente",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All clientes order by name asc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/clientes/nome/asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clientes",
+								"nome",
+								"asc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "diego",
+									"description": "Nome do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "diego",
+									"description": "email do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "bairro",
+									"description": "Bairro do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Cliente",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All clientes order by name desc",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/clientes/nome/desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"clientes",
+								"nome",
+								"desc"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "diego",
+									"description": "Nome do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "diego",
+									"description": "email do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "bairro",
+									"description": "Bairro do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Cliente",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -398,13 +1052,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/clientes/2",
+							"raw": "http://localhost:8080/api/clientes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"clientes",
 								"2"
 							]
@@ -427,13 +1082,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/clientes",
+							"raw": "http://localhost:8080/api/clientes",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"clientes"
 							]
 						}
@@ -455,13 +1111,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/clientes/2",
+							"raw": "http://localhost:8080/api/clientes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"clientes",
 								"2"
 							]
@@ -475,13 +1132,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/clientes/2",
+							"raw": "http://localhost:8080/api/clientes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"clientes",
 								"2"
 							]
@@ -500,14 +1158,53 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/compras",
+							"raw": "http://localhost:8080/api/compras",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"compras"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "mercado",
+									"description": "Nome do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "marcio",
+									"description": "email do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "jardim",
+									"description": "Bairro do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Fornecedor",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Fornecedor",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -519,13 +1216,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/compras/1",
+							"raw": "http://localhost:8080/api/compras/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"compras",
 								"1"
 							]
@@ -540,7 +1238,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fornecedor\": {\r\n        \"id\": \"1\"\r\n    },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 1\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        },\r\n        {\r\n            \"produto\": {\r\n                \"id\": 2\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"fornecedor\": {\r\n        \"id\": \"1\"\r\n    },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 8\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        },\r\n        {\r\n            \"produto\": {\r\n                \"id\": 2\r\n            },\r\n            \"quantity\": 10,\r\n            \"price\": 15\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -548,13 +1246,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/compras",
+							"raw": "http://localhost:8080/api/compras",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"compras"
 							]
 						}
@@ -572,14 +1271,171 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vendas",
+							"raw": "http://localhost:8080/api/vendas",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"vendas"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "diego",
+									"description": "Nome do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "diego",
+									"description": "email do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Cliente",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All vendas with status CONCLUIDO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vendas/concluido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vendas",
+								"concluido"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "diego",
+									"description": "Nome do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "diego",
+									"description": "email do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Cliente",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All vendas with status PENDENTE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vendas/pendente",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vendas",
+								"pendente"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "diego",
+									"description": "Nome do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "diego",
+									"description": "email do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "cep",
+									"value": "180",
+									"description": "CEP do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "sorocaba",
+									"description": "Cidade do Cliente",
+									"disabled": true
+								},
+								{
+									"key": "state",
+									"value": "sp",
+									"description": "Estado do Cliente",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -591,13 +1447,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vendas/1",
+							"raw": "http://localhost:8080/api/vendas/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"vendas",
 								"1"
 							]
@@ -612,7 +1469,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cliente\": {\r\n        \"id\": 1\r\n        },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 1\r\n            },\r\n            \"quantity\": 5\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"cliente\": {\r\n        \"id\": 2\r\n        },\r\n    \"itens\": [\r\n        {\r\n            \"produto\": {\r\n                \"id\": 1\r\n            },\r\n            \"quantity\": 1\r\n        },\r\n                {\r\n            \"produto\": {\r\n                \"id\": 3\r\n            },\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -620,13 +1477,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vendas",
+							"raw": "http://localhost:8080/api/vendas",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"vendas"
 							]
 						}
@@ -639,13 +1497,14 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vendas/7/recebido",
+							"raw": "http://localhost:8080/api/vendas/7/recebido",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"api",
 								"vendas",
 								"7",
 								"recebido"
@@ -662,7 +1521,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE2MjI0OTM0NzQsImV4cCI6MTYyMjU3OTg3NH0.sY_CEmjhKBloqP6vf5NDYTW0sUD7ng7isOjIhKWlcGA",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWVnby5sb3VyZW5jb0BnZnQuY29tIiwiaWF0IjoxNjIyNjU2NTc0LCJleHAiOjE2MjI3NDI5NzR9.77T2njrSLHPc4IgxC6h7ibfToOLuXpqYRBn2L55xWgE",
 				"type": "string"
 			}
 		]
