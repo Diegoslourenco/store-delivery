@@ -142,7 +142,11 @@ public class EstoqueService {
 		List<Estoque> allEstoques = new ArrayList<>();
 		
 		for (Produto produto : allProdutos) {
-			allEstoques.add(estoques.findByProdutoId(produto.getId()).get());
+			
+			if (estoques.findByProdutoId(produto.getId()).isPresent()) {
+				allEstoques.add(estoques.findByProdutoId(produto.getId()).get());			
+			}
+			
 		}
 		
 		return allEstoques;
