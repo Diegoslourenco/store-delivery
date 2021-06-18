@@ -226,7 +226,8 @@ public class VendaService {
 		for (ItemVenda item : itens) { 		
 			emailText = emailText.concat("\n\nProduto: " + produtoService.getOne(item.getProduto().getId()).getName()  +
 										 "\nQuantidade: " + item.getQuantity() +
-										 "\nValor:  R$ " + item.getPrice());
+										 "\nValor:  R$ " + item.getPrice() + 
+										 "\nSubtotal: R$ " + item.getPrice().multiply(new BigDecimal(item.getQuantity())));
 			total = total.add(item.getPrice().multiply(new BigDecimal(item.getQuantity())));
 		}
 		
