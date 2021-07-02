@@ -1,0 +1,32 @@
+<div class="container main-container">
+
+    <div class="row text-center" class="col-md-12"
+        style="padding-bottom: 30px;"
+        style="text-align: center;"
+        style="font-size: xx-large;">
+
+        Estoque
+    </div>
+
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Produto</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Preço de Venda (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="estoques.length === 0">
+                <th>Estoque está vazio</th>
+            </tr>
+            <tr *ngFor="let estoque of estoques; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ estoque.produto.name }}</td>
+                <td>{{ estoque.quantity }}</td>
+                <td>{{ estoque.sellingPrice }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

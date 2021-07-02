@@ -2,12 +2,8 @@
 
 Application built in order to practice and apply the REST architetural concepts.
 
-frontend: Angular
-backend: Java
+## Dependencies: 
 
-## Dependencies:
-
-- [Angular CLI 12.0.5](https://github.com/angular/angular-cli)
 - [Spring Boot 2.4.5](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Spring HATEOAS](https://spring.io/projects/spring-hateoas)

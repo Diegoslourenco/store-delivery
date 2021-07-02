@@ -1,0 +1,30 @@
+<div class="container main-container">
+
+    <div class="row text-center" class="col-md-12"
+        style="padding-bottom: 30px;"
+        style="text-align: center;"
+        style="font-size: xx-large;">
+
+        Compras
+    </div>
+
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fornecedor</th>
+                <th scope="col">Tipos de Itens</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="compras.length === 0">
+                <th>Não existem compras.</th>
+            </tr>
+            <tr *ngFor="let compra of compras; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ compra.fornecedor.name }}</td>
+                <td>{{ compra.itens.length }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
