@@ -1,0 +1,32 @@
+<div class="container main-container">
+
+    <div class="row text-center" class="col-md-12"
+        style="padding-bottom: 30px;"
+        style="text-align: center;"
+        style="font-size: xx-large;">
+
+        Clientes
+    </div>
+
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Email</th>
+                <th scope="col">Telefone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="clientes.length === 0">
+                <th>Não existem clientes cadastrados.</th>
+            </tr>
+            <tr *ngFor="let cliente of clientes; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ cliente.name }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.phone }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

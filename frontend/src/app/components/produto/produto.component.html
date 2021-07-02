@@ -1,0 +1,62 @@
+<div class="container main-container">
+
+    <div class="row text-center" class="col-md-12"
+        style="padding-bottom: 30px;"
+        style="text-align: center;"
+        style="font-size: xx-large;">
+
+        Carrinho de Compras
+    </div>
+
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Produto</th>
+                <th scope="col">Quantidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="itens.length === 0">
+                <th>Carrinho está vazio</th>
+            </tr>
+            <tr *ngFor="let item of itens; let i = index">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ item.produto.name }}</td>
+                <td>{{ item.quantity }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="card-footer">
+        <a class="btn btn-primary" (click)="submitCompra(itens)">
+            <span class="fa fa-shopping-cart"></span>
+            Comprar
+        </a>
+    </div>
+
+    <div class="row text-center" style="padding-top: 50px;">
+
+        <div *ngFor="let produto of produtos" class="col-md-4" style="padding-bottom: 30px;">
+            <div class="card h-100">
+
+                <h4 class="card-title" > {{ produto.name | titlecase }} </h4>
+                <div class="card-body">                    
+                    <div>
+                        <h4 class="card-text" style="text-align: left;"> 
+                            <small><b>Descrição:</b> {{ produto.description }} </small>
+                            <br>
+                            <small><b>Unidade:</b> {{ produto.unit }} </small>
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <a class="btn btn-primary" (click)="addProduto(produto)">
+                        <span class="fa fa-shopping-cart"></span>
+                        Adicionar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
