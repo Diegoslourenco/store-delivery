@@ -2,8 +2,8 @@
 
 Application built in order to practice and apply the REST architetural concepts.
 
-frontend: Angular
-backend: Java
+- frontend: Angular
+- backend: Java
 
 ## Dependencies:
 
