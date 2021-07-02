@@ -1,6 +1,6 @@
 # Delivery store RESTful API
 
-Application built in order to practice and apply the REST architetural concepts.
+Application built in order to practice and apply the REST architetural concepts with a simple frontend for testing pourposes.
 
 - frontend: Angular
 - backend: Java
